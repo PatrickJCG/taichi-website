@@ -82,12 +82,45 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   return (
     <section
       id="contact"
-      className="relative py-24 bg-slate-50 overflow-hidden border-t border-slate-200/60"
+      className="relative py-24 overflow-hidden border-t border-b border-teal-500/20"
+      style={{
+        background:
+          'linear-gradient(165deg, #041319 0%, #062620 25%, #0A4337 55%, #072B23 80%, #041319 100%)',
+      }}
     >
-      {/* ── Background decorations ───────────────────────────────── */}
-      <div className="absolute inset-0 bg-grid-pattern pointer-events-none" aria-hidden />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-teal-500/6 rounded-full blur-3xl -z-10 pointer-events-none" aria-hidden />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-forest-500/5 rounded-full blur-3xl -z-10 pointer-events-none" aria-hidden />
+      {/* ── Top & Bottom glowing divider lines ──────────────────── */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-teal-400/60 to-transparent shadow-[0_0_15px_rgba(45,212,191,0.5)]" />
+      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent shadow-[0_0_15px_rgba(52,211,153,0.5)]" />
+
+      {/* ── Ambient Background decorations ─────────────────────────── */}
+      {/* Grid overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40"
+        style={{
+          backgroundImage: [
+            'linear-gradient(to right, rgba(94,234,212,0.05) 1px, transparent 1px)',
+            'linear-gradient(to bottom, rgba(94,234,212,0.05) 1px, transparent 1px)',
+          ].join(', '),
+          backgroundSize: '40px 40px',
+        }}
+        aria-hidden
+      />
+
+      {/* Radial Glow Orbs */}
+      <div
+        className="absolute top-0 right-0 w-[650px] h-[650px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(13,148,136,0.30) 0%, rgba(15,118,110,0.12) 45%, transparent 70%)',
+        }}
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(16,185,129,0.25) 0%, rgba(5,150,105,0.10) 45%, transparent 70%)',
+        }}
+        aria-hidden
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -99,11 +132,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <Badge variant="sectionTag" className="mb-4">Contact Our Technical Team</Badge>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+          <Badge
+            variant="sectionTag"
+            className="mb-4 bg-teal-400/15 text-teal-200 border-teal-400/40 backdrop-blur-md shadow-[0_0_15px_rgba(20,184,166,0.2)]"
+          >
+            Contact Our Technical Team
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-heading leading-tight drop-shadow-md">
             Talk to an Animal Nutrition Specialist
           </h2>
-          <p className="mt-4 text-slate-500 text-base leading-relaxed">
+          <p className="mt-4 text-emerald-100/75 text-base leading-relaxed font-medium">
             Whether you need custom premix formulations, technical data sheets, dosage guidance, or regulatory support — our certified specialists are here to help.
           </p>
         </motion.div>
@@ -119,22 +157,22 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             className="lg:col-span-4 space-y-6"
           >
             {/* Contact Intro Card */}
-            <div className="relative rounded-2xl p-6 overflow-hidden bg-white border border-slate-200/80 shadow-sm">
+            <div className="relative rounded-2xl p-6 overflow-hidden bg-slate-900/60 border border-teal-500/30 backdrop-blur-xl shadow-2xl">
               {/* Teal accent bar on the left edge */}
-              <div className="absolute left-0 top-6 bottom-6 w-1 rounded-full bg-gradient-to-b from-brand-teal-500 to-brand-forest-500" />
+              <div className="absolute left-0 top-6 bottom-6 w-1 rounded-full bg-gradient-to-b from-teal-400 via-emerald-400 to-teal-600 shadow-[0_0_10px_rgba(45,212,191,0.6)]" />
 
               <div className="pl-4 space-y-4">
                 {/* Live status badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-teal-50 border border-brand-teal-200/70 text-xs font-bold tracking-wider uppercase text-brand-teal-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/15 border border-teal-400/40 text-xs font-bold tracking-wider uppercase text-teal-300 backdrop-blur-sm shadow-[0_0_12px_rgba(20,184,166,0.25)]">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                   Technical Support Available
                 </div>
 
-                <h3 className="text-lg font-extrabold text-slate-900 leading-snug font-heading">
+                <h3 className="text-xl font-extrabold text-white leading-snug font-heading">
                   Connect with Our<br />Expert Technical Team
                 </h3>
 
-                <p className="text-sm text-slate-500 leading-relaxed">
+                <p className="text-sm text-slate-300 leading-relaxed">
                   Get personalised recommendations for feed efficiency, gut health solutions, and species-specific formulations tailored to your operation.
                 </p>
 
@@ -143,7 +181,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   {['Swine', 'Poultry', 'Aquaculture', 'Ruminants', 'Pets'].map(tag => (
                     <span
                       key={tag}
-                      className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-brand-teal-50 border border-brand-teal-200/60 text-brand-teal-700"
+                      className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-teal-950/80 border border-teal-500/40 text-teal-300 shadow-inner"
                     >
                       {tag}
                     </span>
@@ -161,23 +199,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-start gap-4 p-4 bg-white rounded-xl border border-slate-200/80 shadow-sm hover:border-brand-teal-200 hover:shadow-md transition-all duration-300 group"
+                  className="flex items-start gap-4 p-4 bg-slate-900/60 rounded-xl border border-teal-500/20 backdrop-blur-xl shadow-lg hover:border-teal-400/50 hover:bg-slate-900/80 transition-all duration-300 group"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-brand-teal-50 border border-brand-teal-100 flex items-center justify-center text-brand-teal-600 shrink-0 group-hover:bg-brand-teal-100 transition-colors duration-200">
+                  <div className="w-10 h-10 rounded-lg bg-teal-500/15 border border-teal-400/30 flex items-center justify-center text-teal-300 shrink-0 group-hover:bg-teal-500/25 group-hover:border-teal-400/60 transition-colors duration-200 shadow-sm">
                     {item.icon}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{item.title}</p>
+                    <p className="text-[11px] font-bold text-teal-400/90 uppercase tracking-wider mb-0.5">{item.title}</p>
                     {item.href ? (
-                      <a href={item.href} className="text-sm text-slate-700 font-medium hover:text-brand-teal-700 transition-colors duration-200 break-words">
+                      <a href={item.href} className="text-sm text-slate-200 font-medium hover:text-teal-300 transition-colors duration-200 break-words">
                         {item.detail}
                       </a>
                     ) : (
-                      <p className="text-sm text-slate-700 font-medium leading-snug">{item.detail}</p>
+                      <p className="text-sm text-slate-200 font-medium leading-snug">{item.detail}</p>
                     )}
                   </div>
                   {item.href && (
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-brand-teal-500 shrink-0 mt-1 transition-colors duration-200" />
+                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-teal-300 shrink-0 mt-1 transition-colors duration-200" />
                   )}
                 </motion.div>
               ))}
@@ -192,19 +230,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             className="lg:col-span-8"
           >
-            <div className="bg-white rounded-2xl border border-slate-200/90 shadow-lg overflow-hidden">
+            <div className="bg-slate-900/80 backdrop-blur-2xl rounded-3xl border border-teal-500/30 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7),0_0_40px_rgba(20,184,166,0.15)] overflow-hidden">
 
               {/* Form Header Strip */}
-              <div className="px-8 py-5 bg-gradient-to-r from-slate-50 to-brand-teal-50/40 border-b border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="px-8 py-5 bg-gradient-to-r from-teal-950/90 via-slate-900/90 to-emerald-950/90 border-b border-teal-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 font-heading">Submit a Technical Inquiry</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">Fields marked <span className="text-red-500 font-bold">*</span> are required</p>
+                  <h3 className="text-base font-bold text-white font-heading">Submit a Technical Inquiry</h3>
+                  <p className="text-xs text-slate-300 mt-0.5">Fields marked <span className="text-teal-400 font-bold">*</span> are required</p>
                 </div>
                 {/* Trust Bar */}
                 <div className="flex items-center gap-4">
                   {TRUST_ITEMS.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
-                      <span className="text-brand-teal-500">{item.icon}</span>
+                    <div key={idx} className="flex items-center gap-1.5 text-[11px] font-semibold text-white">
+                      <span className="text-teal-400">{item.icon}</span>
                       <span className="hidden sm:inline">{item.label}</span>
                     </div>
                   ))}
@@ -215,10 +253,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
                 {/* ── Inquiry Items Summary ─────────────────────────── */}
                 {inquiryItems.length > 0 && (
-                  <div className="p-4 bg-gradient-to-br from-teal-50 to-emerald-50/50 rounded-xl border border-teal-200/70">
-                    <label className="block text-xs font-bold text-brand-teal-800 uppercase tracking-wider mb-3">
+                  <div className="p-4 bg-gradient-to-br from-teal-950/90 to-emerald-950/80 rounded-xl border border-teal-500/40 shadow-inner">
+                    <label className="block text-xs font-bold text-white uppercase tracking-wider mb-3">
                       <span className="inline-flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-brand-teal-500 animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_rgba(45,212,191,0.8)]" />
                         Products in Inquiry ({inquiryItems.length})
                       </span>
                     </label>
@@ -226,13 +264,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       {inquiryItems.map(item => (
                         <span
                           key={item.id}
-                          className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-lg bg-white border border-teal-200 text-teal-800 text-xs font-semibold shadow-sm"
+                          className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1 rounded-lg bg-slate-900/90 border border-teal-500/40 text-white text-xs font-semibold shadow-sm"
                         >
                           <span>{item.title}</span>
                           <button
                             type="button"
                             onClick={() => onRemoveInquiryItem(item.id)}
-                            className="w-5 h-5 flex items-center justify-center rounded-full text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                            className="w-5 h-5 flex items-center justify-center rounded-full text-slate-300 hover:bg-red-950 hover:text-red-400 transition-colors"
                             aria-label={`Remove ${item.title}`}
                           >
                             <X className="w-3 h-3" />
@@ -248,24 +286,28 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <Input
                     label="Full Name"
                     required
+                    labelClassName="text-white"
                     placeholder="e.g. Dr. Jane Smith"
                     value={formData.name}
                     onChange={update('name')}
+                    className="bg-slate-950/70 border-slate-700/80 text-white placeholder-slate-400 focus:border-teal-400 focus:ring-teal-400/20"
                   />
                   <Input
                     label="Business Email"
                     type="email"
                     required
+                    labelClassName="text-white"
                     placeholder="jane.smith@company.com"
                     value={formData.email}
                     onChange={update('email')}
+                    className="bg-slate-950/70 border-slate-700/80 text-white placeholder-slate-400 focus:border-teal-400 focus:ring-teal-400/20"
                   />
                 </div>
 
                 {/* ── Row 2: Company / Farm Name + Target Species ───── */}
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-heading">
+                    <label className="block text-xs font-bold text-white uppercase tracking-wider mb-2 font-heading">
                       Company / Farm Name
                     </label>
                     <div className="relative">
@@ -275,16 +317,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                         placeholder="e.g. Green Valley Farms Inc."
                         value={formData.company}
                         onChange={update('company')}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-brand-teal-600 focus:ring-2 focus:ring-brand-teal-500/20 outline-none transition-all text-slate-800 placeholder-slate-400"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-700/80 bg-slate-950/70 text-white placeholder-slate-400 focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20 outline-none transition-all"
                       />
                     </div>
                   </div>
                   <Select
                     label="Target Species / Category"
                     required
+                    labelClassName="text-white"
                     options={SPECIES_OPTIONS}
                     value={formData.species}
                     onChange={update('species')}
+                    className="bg-slate-950/70 border-slate-700/80 text-white focus:border-teal-400 focus:ring-teal-400/20 [&_option]:bg-slate-900 [&_option]:text-white"
                   />
                 </div>
 
@@ -292,10 +336,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 <Textarea
                   label="Inquiry Details / Formulation Request"
                   required
+                  labelClassName="text-white"
                   rows={4}
                   placeholder="Describe your feed requirements, species details, production volume, or requested sample specifications..."
                   value={formData.message}
                   onChange={update('message')}
+                  className="bg-slate-950/70 border-slate-700/80 text-white placeholder-slate-400 focus:border-teal-400 focus:ring-teal-400/20"
                 />
 
                 {/* ── Submit ────────────────────────────────────────── */}
@@ -306,13 +352,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     fullWidth
                     size="lg"
                     icon={<Send className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />}
-                    className="group !text-base"
+                    className="group !text-base !bg-gradient-to-r !from-teal-500 !to-emerald-500 hover:!from-teal-400 hover:!to-emerald-400 !border-none shadow-lg shadow-teal-500/25 hover:shadow-teal-400/40 text-white font-bold"
                   >
                     Send Technical Inquiry
                   </Button>
-                  <p className="text-center text-[11px] text-slate-400 mt-3">
+                  <p className="text-center text-[11px] text-slate-300 mt-3">
                     By submitting, you agree to our{' '}
-                    <a href="#" className="underline hover:text-brand-teal-600 transition-colors">Privacy Policy</a>.
+                    <a href="#" className="underline hover:text-white transition-colors">Privacy Policy</a>.
                     Your information is kept strictly confidential.
                   </p>
                 </div>

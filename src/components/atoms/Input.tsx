@@ -3,12 +3,13 @@ import React from 'react';
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   required?: boolean;
+  labelClassName?: string;
 }
 
-export const Input: React.FC<InputProps> = ({ label, required, className = '', ...props }) => {
+export const Input: React.FC<InputProps> = ({ label, required, labelClassName, className = '', ...props }) => {
   return (
     <div>
-      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-heading">
+      <label className={`block text-xs font-bold uppercase tracking-wider mb-2 font-heading ${labelClassName || 'text-slate-700'}`}>
         {label} {required && '*'}
       </label>
       <input
@@ -24,12 +25,13 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   label: string;
   options: { label: string; value: string }[];
   required?: boolean;
+  labelClassName?: string;
 }
 
-export const Select: React.FC<SelectProps> = ({ label, options, required, className = '', ...props }) => {
+export const Select: React.FC<SelectProps> = ({ label, options, required, labelClassName, className = '', ...props }) => {
   return (
     <div>
-      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-heading">
+      <label className={`block text-xs font-bold uppercase tracking-wider mb-2 font-heading ${labelClassName || 'text-slate-700'}`}>
         {label} {required && '*'}
       </label>
       <select
@@ -50,12 +52,13 @@ export const Select: React.FC<SelectProps> = ({ label, options, required, classN
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   required?: boolean;
+  labelClassName?: string;
 }
 
-export const Textarea: React.FC<TextareaProps> = ({ label, required, className = '', ...props }) => {
+export const Textarea: React.FC<TextareaProps> = ({ label, required, labelClassName, className = '', ...props }) => {
   return (
     <div>
-      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-heading">
+      <label className={`block text-xs font-bold uppercase tracking-wider mb-2 font-heading ${labelClassName || 'text-slate-700'}`}>
         {label} {required && '*'}
       </label>
       <textarea

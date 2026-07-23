@@ -125,10 +125,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           }
           className={
             isAddedToInquiry
-              ? '!bg-amber-600 !border-amber-500 !text-white hover:!bg-amber-700 shadow-md'
+              ? '!bg-amber-600 !border-amber-500 !text-white hover:!bg-amber-700 hover:!border-amber-600 hover:!text-white shadow-md'
               : dark
-                ? '!bg-teal-500/25 !border-teal-400/50 !text-teal-100 hover:!bg-teal-50 hover:!text-white hover:!border-teal-400 hover:shadow-lg hover:shadow-teal-500/30'
-                : '!bg-brand-teal-50/80 !text-brand-teal-800 !border-brand-teal-200/80 hover:!bg-brand-teal-700 hover:!text-white hover:!border-brand-teal-700 shadow-md'
+                ? '!bg-teal-500/20 !border-teal-400/40 !text-teal-200 hover:!bg-teal-600 hover:!text-white hover:!border-teal-500 hover:shadow-lg hover:shadow-teal-500/40 transition-all duration-200'
+                : '!bg-teal-50 !text-teal-800 !border-teal-200 hover:!bg-teal-700 hover:!text-white hover:!border-teal-700 shadow-md transition-all duration-200'
           }
         >
           {isAddedToInquiry ? "Added to Inquiry" : "Add to Inquiry"}
