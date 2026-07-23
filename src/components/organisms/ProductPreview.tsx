@@ -30,15 +30,6 @@ function getSortedPreviewProducts(): Product[] {
   });
 }
 
-/** Scroll to the full product catalog section with navbar offset. */
-function scrollToFullCatalog() {
-  const target = document.getElementById('products');
-  if (!target) return;
-  const offset = 80;
-  const top = target.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: 'smooth' });
-}
-
 // ─── Props ────────────────────────────────────────────────────────────────────
 export interface ProductPreviewProps {
   inquiryItems: Product[];
