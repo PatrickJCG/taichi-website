@@ -54,14 +54,19 @@ export const ScannableMetricsTable: React.FC = () => {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Section intro */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/20 border border-teal-400/40 text-teal-200 text-xs font-bold uppercase tracking-widest">
-          <FlaskConical className="w-3.5 h-3.5" />
-          <span>Scannable Science</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/20 border border-teal-400/40 text-teal-200 text-xs font-bold uppercase tracking-widest">
+            <FlaskConical className="w-3.5 h-3.5" />
+            <span>Scannable Science</span>
+          </div>
+          <p className="text-sm text-slate-400 italic">
+            Field-trial benchmarks · ISO-verified data · Per-species efficacy
+          </p>
         </div>
-        <p className="text-sm text-slate-400 italic">
-          Field-trial benchmarks · ISO-verified data · Per-species efficacy
-        </p>
+        <div className="sm:hidden text-xs text-teal-300/80 font-medium flex items-center gap-1">
+          <span>← Swipe table →</span>
+        </div>
       </div>
 
       {/* Scrollable table wrapper */}

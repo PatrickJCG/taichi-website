@@ -77,9 +77,12 @@ export const HeroCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const SLIDE_DURATION = 5500; // 5.5 seconds per slide
+  const MIN_SWIPE_DISTANCE = 50;
 
   useEffect(() => {
     if (isPaused) return;
@@ -113,6 +116,28 @@ export const HeroCarousel: React.FC = () => {
     setCurrentIndex((prev) => (prev - 1 + FULL_HERO_SLIDES.length) % FULL_HERO_SLIDES.length);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEndX(null);
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > MIN_SWIPE_DISTANCE;
+    const isRightSwipe = distance < -MIN_SWIPE_DISTANCE;
+
+    if (isLeftSwipe) {
+      handleNext();
+    } else if (isRightSwipe) {
+      handlePrev();
+    }
+  };
+
   const handleCtaClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     if (href.startsWith('/')) {
@@ -122,7 +147,7 @@ export const HeroCarousel: React.FC = () => {
       const targetId = href.replace('#', '');
       const element = document.getElementById(targetId);
       if (element) {
-        const offset = 80;
+        const offset = window.innerWidth < 640 ? 70 : 80;
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = element.getBoundingClientRect().top;
         const offsetPosition = elementRect - bodyRect - offset;
@@ -139,7 +164,10 @@ export const HeroCarousel: React.FC = () => {
     <div
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative w-full min-h-[600px] h-[75vh] max-h-[780px] overflow-hidden bg-slate-950 text-white select-none"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      className="relative w-full min-h-[560px] sm:min-h-[620px] h-auto sm:h-[75vh] lg:h-[780px] overflow-hidden bg-slate-950 text-white select-none"
     >
       {/* Slide Auto-Progress Bar (Top) */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-slate-800/80 z-30 overflow-hidden">
@@ -166,19 +194,19 @@ export const HeroCarousel: React.FC = () => {
             className="w-full h-full object-cover object-center"
           />
           {/* Deep Navy/Teal Scrim overlay for legibility */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/85 to-slate-950/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-transparent to-slate-950/50" />
 
           {/* Decorative Glowing Teal & Emerald Orbs */}
-          <div className="absolute top-1/4 left-10 w-96 h-96 bg-brand-teal-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/4 left-10 w-72 sm:w-96 h-72 sm:h-96 bg-brand-teal-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-1/4 left-1/3 w-64 sm:w-80 h-64 sm:h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/3 right-1/4 w-56 sm:w-72 h-56 sm:h-72 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
       {/* Floating Content Container over 100% Full Width Hero */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center pb-20 sm:pb-24">
-        <div className="max-w-3xl space-y-6 pt-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center py-12 sm:py-16 pb-20 sm:pb-24">
+        <div className="max-w-3xl space-y-4 sm:space-y-6 pt-4 sm:pt-6">
           
           <AnimatePresence mode="wait">
             <motion.div
@@ -187,73 +215,73 @@ export const HeroCarousel: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-6"
+              className="space-y-4 sm:space-y-6"
             >
               {/* Top Tag & Certification Badge */}
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 <Badge
                   variant="sectionTag"
-                  icon={<ShieldCheck className="w-4 h-4 text-brand-teal-300" />}
-                  className="!bg-slate-900/80 !text-brand-teal-200 !border-brand-teal-500/40 backdrop-blur-md shadow-lg"
+                  icon={<ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand-teal-300" />}
+                  className="!bg-slate-900/80 !text-brand-teal-200 !border-brand-teal-500/40 backdrop-blur-md shadow-lg text-xs"
                 >
                   {slide.tag}
                 </Badge>
 
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md shadow-sm">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md shadow-sm">
                   <Award className="w-3.5 h-3.5 text-amber-400" />
                   <span>{slide.badgeText}</span>
                 </div>
               </div>
 
               {/* Headline Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight font-heading drop-shadow-md">
+              <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight font-heading drop-shadow-md">
                 {slide.title}{' '}
-                <span className="bg-gradient-to-r from-brand-teal-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent underline decoration-brand-teal-400/60 underline-offset-8 decoration-4">
+                <span className="bg-gradient-to-r from-brand-teal-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent underline decoration-brand-teal-400/60 underline-offset-4 sm:underline-offset-8 decoration-2 sm:decoration-4">
                   {slide.highlightText}
                 </span>
               </h1>
 
               {/* Subtitle Description */}
-              <p className="text-lg sm:text-xl text-slate-200/95 max-w-2xl font-normal leading-relaxed drop-shadow">
+              <p className="text-sm sm:text-lg lg:text-xl text-slate-200/95 max-w-2xl font-normal leading-relaxed drop-shadow">
                 {slide.description}
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-3">
                 <Button
                   variant="primary"
-                  size="lg"
+                  size="md"
                   href={slide.ctaPrimaryHref}
                   onClick={(e) => handleCtaClick(e, slide.ctaPrimaryHref)}
                   icon={<ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />}
-                  className="group shadow-xl shadow-brand-teal-600/30 !bg-brand-teal-600 hover:!bg-brand-teal-700"
+                  className="group shadow-xl shadow-brand-teal-600/30 !bg-brand-teal-600 hover:!bg-brand-teal-700 sm:!w-auto justify-center"
                 >
                   {slide.ctaPrimary}
                 </Button>
 
                 <Button
                   variant="outline"
-                  size="lg"
+                  size="md"
                   href={slide.ctaSecondaryHref}
                   onClick={(e) => handleCtaClick(e, slide.ctaSecondaryHref)}
-                  className="!bg-slate-900/70 hover:!bg-slate-900/90 !text-white !border-slate-700/80 backdrop-blur-md shadow-lg hover:!border-brand-teal-400/60"
+                  className="!bg-slate-900/70 hover:!bg-slate-900/90 !text-white !border-slate-700/80 backdrop-blur-md shadow-lg hover:!border-brand-teal-400/60 sm:!w-auto justify-center"
                 >
                   {slide.ctaSecondary}
                 </Button>
               </div>
 
               {/* Feature Highlights Bar */}
-              <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-300 font-medium">
+              <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-slate-300 font-medium">
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-brand-teal-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-teal-400" />
                   <span>Bio-Active Absorption</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Non-Antibiotic Formulas</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-amber-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
                   <span>ISO 22000 Certified</span>
                 </span>
               </div>
@@ -264,10 +292,10 @@ export const HeroCarousel: React.FC = () => {
         </div>
       </div>
 
-      {/* Floating Left & Right Navigation Chevrons */}
+      {/* Floating Left & Right Navigation Chevrons (Desktop & Tablet) */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/70 hover:bg-brand-teal-600 text-white backdrop-blur-md border border-slate-700/80 hover:border-brand-teal-400 shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
+        className="hidden sm:flex absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-900/70 hover:bg-brand-teal-600 text-white backdrop-blur-md border border-slate-700/80 hover:border-brand-teal-400 shadow-xl items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
         aria-label="Previous Slide"
       >
         <ChevronLeft className="w-6 h-6" />
@@ -275,14 +303,14 @@ export const HeroCarousel: React.FC = () => {
 
       <button
         onClick={handleNext}
-        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/70 hover:bg-brand-teal-600 text-white backdrop-blur-md border border-slate-700/80 hover:border-brand-teal-400 shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
+        className="hidden sm:flex absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-900/70 hover:bg-brand-teal-600 text-white backdrop-blur-md border border-slate-700/80 hover:border-brand-teal-400 shadow-xl items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-20"
         aria-label="Next Slide"
       >
         <ChevronRight className="w-6 h-6" />
       </button>
 
       {/* Bottom Floating Bar: Centered Interactive Slide Controls */}
-      <div className="absolute bottom-8 left-0 right-0 z-20 pointer-events-none">
+      <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-20 pointer-events-none">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
           
           {/* Centered Desktop Slide Title Tabs */}
@@ -309,8 +337,16 @@ export const HeroCarousel: React.FC = () => {
             })}
           </div>
 
-          {/* Centered Mobile Dot Indicators */}
-          <div className="pointer-events-auto sm:hidden flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-800/90">
+          {/* Centered Mobile Dot Indicators & Swipe Hint */}
+          <div className="pointer-events-auto sm:hidden flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-full border border-slate-800/90 shadow-lg">
+            <button
+              onClick={handlePrev}
+              className="text-slate-400 hover:text-white p-1"
+              aria-label="Previous Slide"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
             {FULL_HERO_SLIDES.map((s, idx) => (
               <button
                 key={s.id}
@@ -324,6 +360,14 @@ export const HeroCarousel: React.FC = () => {
                 aria-label={`Slide ${idx + 1}`}
               />
             ))}
+
+            <button
+              onClick={handleNext}
+              className="text-slate-400 hover:text-white p-1"
+              aria-label="Next Slide"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
 
         </div>

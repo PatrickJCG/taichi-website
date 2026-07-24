@@ -44,7 +44,20 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
     return () => observer.disconnect();
   }, [location.pathname]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const handleHomeClick = (e: React.MouseEvent) => {
+    setIsOpen(false);
     if (location.pathname === '/') {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -55,6 +68,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
   };
 
   const handleAnchorClick = (e: React.MouseEvent, href: string) => {
+    setIsOpen(false);
     if (href === '/') {
       handleHomeClick(e);
       return;
@@ -65,7 +79,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
       const element = document.getElementById(targetId);
 
       if (location.pathname === '/' && element) {
-        const offset = 80;
+        const offset = window.innerWidth < 640 ? 70 : 80;
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = element.getBoundingClientRect().top;
         const offsetPosition = elementRect - bodyRect - offset;
@@ -77,175 +91,183 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/70 shadow-sm transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <>
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/70 shadow-sm transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20">
 
-          {/* Logo */}
-          <Link
-            to="/"
-            onClick={handleHomeClick}
-            className="flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-500 rounded-lg"
-            aria-label="Tai Chi Newtech Inc. — Return to home"
-          >
-            <img
-              src="/logo.png"
-              alt="Tai Chi Newtech Inc. — Explore | Research | Sustain"
-              className="h-11 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
-            />
-          </Link>
-
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center space-x-8" aria-label="Main navigation">
-            {navLinks.map((link) => {
-              const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
-              const isActive = activeSection === sectionId;
-              const linkClass = [
-                'font-semibold text-sm transition-colors duration-300 relative py-1 group',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 focus-visible:ring-offset-2 rounded-sm',
-                isActive ? 'text-brand-teal-700' : 'text-slate-600 hover:text-brand-teal-700',
-              ].join(' ');
-              const underlineClass = [
-                'absolute bottom-0 left-0 h-0.5 bg-brand-teal-600 transition-all duration-300 ease-out rounded-full',
-                isActive ? 'w-full' : 'w-0 group-hover:w-full',
-              ].join(' ');
-
-              // Router-based links (absolute paths like /products)
-              if (link.to) {
-                return (
-                  <Link key={link.name} to={link.to} aria-current={isActive ? 'page' : undefined} className={linkClass}>
-                    <span>{link.name}</span>
-                    <span className={underlineClass} />
-                  </Link>
-                );
-              }
-              if (link.href === '/') {
-                return (
-                  <Link key={link.name} to="/" onClick={handleHomeClick} aria-current={isActive ? 'page' : undefined} className={linkClass}>
-                    <span>{link.name}</span>
-                    <span className={underlineClass} />
-                  </Link>
-                );
-              }
-              // Hash anchor links (same-page section scrolling or cross-page navigation)
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleAnchorClick(e, link.href)}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={linkClass}
-                >
-                  <span>{link.name}</span>
-                  <span className={underlineClass} />
-                </a>
-              );
-            })}
-          </nav>
-
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center">
-            <Button
-              variant="primary"
-              size="md"
-              href="#contact"
-              onClick={(e) => handleAnchorClick(e, '#contact')}
+            {/* Logo */}
+            <Link
+              to="/"
+              onClick={handleHomeClick}
+              className="flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-500 rounded-lg"
+              aria-label="Tai Chi Newtech Inc. — Return to home"
             >
-              Inquire Now {inquiryCount > 0 && `(${inquiryCount})`}
-            </Button>
-          </div>
+              <img
+                src="/logo.png"
+                alt="Tai Chi Newtech Inc. — Explore | Research | Sustain"
+                className="h-9 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+              />
+            </Link>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-slate-700 hover:text-slate-900 p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 rounded-lg hover:bg-slate-100 transition-colors"
-              aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={isOpen}
-              aria-controls="mobile-nav"
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
+            {/* Desktop Nav Links */}
+            <nav className="hidden md:flex items-center space-x-8" aria-label="Main navigation">
+              {navLinks.map((link) => {
+                const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
+                const isActive = activeSection === sectionId;
+                const linkClass = [
+                  'font-semibold text-sm transition-colors duration-300 relative py-1 group',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 focus-visible:ring-offset-2 rounded-sm',
+                  isActive ? 'text-brand-teal-700' : 'text-slate-600 hover:text-brand-teal-700',
+                ].join(' ');
+                const underlineClass = [
+                  'absolute bottom-0 left-0 h-0.5 bg-brand-teal-600 transition-all duration-300 ease-out rounded-full',
+                  isActive ? 'w-full' : 'w-0 group-hover:w-full',
+                ].join(' ');
 
-      {/* Mobile Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id="mobile-nav"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3 overflow-hidden"
-            role="navigation"
-            aria-label="Mobile navigation"
-          >
-            {navLinks.map((link) => {
-              const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
-              const isActive = activeSection === sectionId;
-              const mobileLinkClass = [
-                'flex items-center font-medium text-base py-2 transition-all rounded-lg px-2',
-                'focus-visible:ring-2 focus-visible:ring-brand-teal-500 focus-visible:ring-offset-1 outline-none',
-                isActive ? 'text-brand-teal-700 bg-brand-teal-50 pl-3' : 'text-slate-700 hover:text-brand-teal-700 hover:pl-3',
-              ].join(' ');
-              const dot = isActive && <span className="w-1.5 h-1.5 rounded-full bg-brand-teal-600 mr-2" aria-hidden />;
-
-              if (link.to) {
+                if (link.to) {
+                  return (
+                    <Link key={link.name} to={link.to} aria-current={isActive ? 'page' : undefined} className={linkClass}>
+                      <span>{link.name}</span>
+                      <span className={underlineClass} />
+                    </Link>
+                  );
+                }
+                if (link.href === '/') {
+                  return (
+                    <Link key={link.name} to="/" onClick={handleHomeClick} aria-current={isActive ? 'page' : undefined} className={linkClass}>
+                      <span>{link.name}</span>
+                      <span className={underlineClass} />
+                    </Link>
+                  );
+                }
                 return (
-                  <Link key={link.name} to={link.to} onClick={() => setIsOpen(false)} aria-current={isActive ? 'page' : undefined} className={mobileLinkClass}>
-                    {dot}{link.name}
-                  </Link>
-                );
-              }
-              if (link.href === '/') {
-                return (
-                  <Link
+                  <a
                     key={link.name}
-                    to="/"
-                    onClick={(e) => {
-                      setIsOpen(false);
-                      handleHomeClick(e);
-                    }}
+                    href={link.href}
+                    onClick={(e) => handleAnchorClick(e, link.href)}
                     aria-current={isActive ? 'page' : undefined}
-                    className={mobileLinkClass}
+                    className={linkClass}
                   >
-                    {dot}{link.name}
-                  </Link>
+                    <span>{link.name}</span>
+                    <span className={underlineClass} />
+                  </a>
                 );
-              }
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => {
-                    setIsOpen(false);
-                    handleAnchorClick(e, link.href);
-                  }}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={mobileLinkClass}
-                >
-                  {dot}{link.name}
-                </a>
-              );
-            })}
-            <div className="pt-2">
+              })}
+            </nav>
+
+            {/* CTA Button */}
+            <div className="hidden md:flex items-center">
               <Button
-                href="#contact"
                 variant="primary"
-                fullWidth
-                onClick={(e) => {
-                  setIsOpen(false);
-                  handleAnchorClick(e, '#contact');
-                }}
+                size="md"
+                href="#contact"
+                onClick={(e) => handleAnchorClick(e, '#contact')}
               >
                 Inquire Now {inquiryCount > 0 && `(${inquiryCount})`}
               </Button>
             </div>
-          </motion.div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="text-slate-700 hover:text-slate-900 p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 rounded-lg hover:bg-slate-100 transition-colors"
+                aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isOpen}
+                aria-controls="mobile-nav"
+              >
+                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Drawer & Semi-Transparent Backdrop */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-40 md:hidden"
+              aria-hidden="true"
+            />
+
+            {/* Floating Dropdown Drawer */}
+            <motion.div
+              id="mobile-nav"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed top-[64px] inset-x-0 bg-white/98 backdrop-blur-xl border-b border-slate-200/90 shadow-2xl z-40 px-5 pt-3 pb-6 space-y-2 md:hidden max-h-[calc(100vh-64px)] overflow-y-auto"
+              role="navigation"
+              aria-label="Mobile navigation"
+            >
+              {navLinks.map((link) => {
+                const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
+                const isActive = activeSection === sectionId;
+                const mobileLinkClass = [
+                  'flex items-center font-semibold text-base py-3 transition-all rounded-xl px-3 min-h-[44px]',
+                  'focus-visible:ring-2 focus-visible:ring-brand-teal-500 focus-visible:ring-offset-1 outline-none',
+                  isActive ? 'text-brand-teal-700 bg-brand-teal-50/90 pl-4' : 'text-slate-700 hover:text-brand-teal-700 hover:bg-slate-50 hover:pl-4',
+                ].join(' ');
+                const dot = isActive && <span className="w-2 h-2 rounded-full bg-brand-teal-600 mr-2.5 shrink-0" aria-hidden />;
+
+                if (link.to) {
+                  return (
+                    <Link key={link.name} to={link.to} onClick={() => setIsOpen(false)} aria-current={isActive ? 'page' : undefined} className={mobileLinkClass}>
+                      {dot}{link.name}
+                    </Link>
+                  );
+                }
+                if (link.href === '/') {
+                  return (
+                    <Link
+                      key={link.name}
+                      to="/"
+                      onClick={(e) => handleHomeClick(e)}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={mobileLinkClass}
+                    >
+                      {dot}{link.name}
+                    </Link>
+                  );
+                }
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleAnchorClick(e, link.href)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={mobileLinkClass}
+                  >
+                    {dot}{link.name}
+                  </a>
+                );
+              })}
+
+              <div className="pt-3 border-t border-slate-100">
+                <Button
+                  href="#contact"
+                  variant="primary"
+                  fullWidth
+                  size="lg"
+                  onClick={(e) => handleAnchorClick(e, '#contact')}
+                >
+                  Inquire Now {inquiryCount > 0 && `(${inquiryCount})`}
+                </Button>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };

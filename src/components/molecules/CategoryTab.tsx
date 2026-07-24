@@ -55,8 +55,8 @@ export const CategoryTab: React.FC<CategoryTabProps> = ({
       role="tab"
       aria-selected={isActive}
       className={[
-        'relative px-4 py-2 rounded-full text-xs sm:text-sm font-semibold',
-        'transition-all duration-200 flex items-center gap-2',
+        'relative px-3.5 py-2 min-h-[40px] sm:min-h-[44px] rounded-full text-xs sm:text-sm font-semibold',
+        'transition-all duration-200 flex items-center gap-2 touch-manipulation',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent',
         isActive
           // Active: solid gradient pill
