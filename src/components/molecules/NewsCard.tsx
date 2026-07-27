@@ -38,14 +38,14 @@ export const NewsCard: React.FC<NewsCardProps> = ({ article, delay = 0 }) => {
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex items-center gap-3 text-xs font-semibold text-slate-500 mb-2">
           <span className="flex items-center gap-1">
-            <Calendar className="w-3.5 h-3.5 text-brand-teal-600" />
+            <Calendar className="w-3.5 h-3.5 text-brand-teal-600 shrink-0" />
             {article.date}
           </span>
           {article.readTime && (
             <>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-amber-500" />
+                <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 {article.readTime}
               </span>
             </>
@@ -67,7 +67,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ article, delay = 0 }) => {
           className="inline-flex items-center gap-2 text-sm font-semibold text-brand-teal-700 group-hover:text-brand-teal-800 transition-colors mt-auto"
         >
           <span>Read Full Article</span>
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 shrink-0" />
         </Link>
       </div>
     </motion.article>

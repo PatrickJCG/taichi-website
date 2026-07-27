@@ -165,20 +165,17 @@ export const NewsPage: React.FC<NewsPageProps> = () => {
 
               {/* Key Takeaways Callout Card */}
               {activeArticle.keyHighlights && activeArticle.keyHighlights.length > 0 && (
-                <div className="mb-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 text-white border border-brand-teal-500/30 shadow-xl relative overflow-hidden">
-                  <div className="hidden sm:block absolute top-0 right-0 p-6 text-brand-teal-400/10 pointer-events-none">
-                    <ShieldCheck className="w-24 h-24 sm:w-32 sm:h-32" />
-                  </div>
+                <div className="mb-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 text-white border border-brand-teal-500/30 shadow-xl relative">
                   <div className="relative z-10">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-teal-500/20 border border-brand-teal-400/40 text-brand-teal-300 text-xs font-bold uppercase tracking-wider mb-4">
-                      <Sparkles className="w-3.5 h-3.5" />
+                      <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                       <span>Key Technical Takeaways</span>
                     </div>
                     <ul className="space-y-3">
                       {activeArticle.keyHighlights.map((highlight, idx) => (
                         <li key={idx} className="flex items-start gap-3 text-slate-100 text-sm sm:text-base leading-relaxed">
                           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                          <span>{highlight}</span>
+                          <span className="flex-1">{highlight}</span>
                         </li>
                       ))}
                     </ul>
