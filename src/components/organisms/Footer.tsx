@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="inline-block group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-500 rounded-lg">
               <img
-                src="/logo-dark.png"
+                src="/images/logo-dark.png"
                 alt="Tai Chi Newtech Inc. — Explore | Research | Sustain"
                 className="h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
               />

@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import type { NewsArticle } from '../../data/mockProducts';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '../atoms';
 
@@ -20,7 +21,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ article, delay = 0 }) => {
       className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl hover:border-brand-teal-200/80 transition-shadow duration-300 flex flex-col h-full group"
     >
       {/* Image & Category Tag */}
-      <div className="relative h-48 overflow-hidden bg-slate-100">
+      <Link to={`/news/${article.id}`} className="relative h-48 overflow-hidden bg-slate-100 block">
         <img
           src={article.imageUrl}
           alt={article.title}
@@ -31,31 +32,45 @@ export const NewsCard: React.FC<NewsCardProps> = ({ article, delay = 0 }) => {
             {article.category}
           </Badge>
         </div>
-      </div>
+      </Link>
 
       {/* Card Content */}
       <div className="p-6 flex flex-col flex-grow">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 mb-2">
-          <Calendar className="w-3.5 h-3.5 text-brand-teal-600" />
-          <span>{article.date}</span>
+        <div className="flex items-center gap-3 text-xs font-semibold text-slate-500 mb-2">
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5 text-brand-teal-600" />
+            {article.date}
+          </span>
+          {article.readTime && (
+            <>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-amber-500" />
+                {article.readTime}
+              </span>
+            </>
+          )}
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-brand-teal-700 transition-colors duration-200 font-heading mb-3 line-clamp-2">
-          {article.title}
-        </h3>
+        <Link to={`/news/${article.id}`} className="block group-hover:text-brand-teal-700 transition-colors">
+          <h3 className="text-xl font-extrabold text-slate-900 font-heading mb-3 line-clamp-2">
+            {article.title}
+          </h3>
+        </Link>
 
-        <p className="text-sm text-slate-600 leading-relaxed flex-grow mb-6">
+        <p className="text-sm text-slate-600 leading-relaxed flex-grow mb-6 line-clamp-3">
           {article.summary}
         </p>
 
-        <a
-          href="#news"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-brand-teal-700 group-hover:text-brand-teal-800 transition-colors"
+        <Link
+          to={`/news/${article.id}`}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-brand-teal-700 group-hover:text-brand-teal-800 transition-colors mt-auto"
         >
           <span>Read Full Article</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-        </a>
+        </Link>
       </div>
     </motion.article>
   );
 };
+

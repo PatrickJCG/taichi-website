@@ -18,14 +18,18 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
     { name: "Home",            href: "/"         },
     { name: "About Us",        href: "#about"    },
     { name: "Product Catalog", href: "/products", to: "/products" },
-    { name: "News & Updates",  href: "#news"     },
+    { name: "News & Updates",  href: "/news",     to: "/news" },
     { name: "Contact",         href: "#contact"  },
   ];
 
   // Track active section via IntersectionObserver for aria-current
   useEffect(() => {
-    if (location.pathname !== '/') {
+    if (location.pathname === '/products') {
       setActiveSection('products');
+      return;
+    }
+    if (location.pathname.startsWith('/news')) {
+      setActiveSection('news');
       return;
     }
     const hashLinks = navLinks.filter(l => l.href.startsWith('#'));
@@ -104,14 +108,14 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
               aria-label="Tai Chi Newtech Inc. — Return to home"
             >
               <img
-                src="/logo.png"
+                src="/images/logo.png"
                 alt="Tai Chi Newtech Inc. — Explore | Research | Sustain"
                 className="h-9 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </Link>
 
             {/* Desktop Nav Links */}
-            <nav className="hidden md:flex items-center space-x-8" aria-label="Main navigation">
+            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8" aria-label="Main navigation">
               {navLinks.map((link) => {
                 const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
                 const isActive = activeSection === sectionId;
@@ -157,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
             </nav>
 
             {/* CTA Button */}
-            <div className="hidden md:flex items-center">
+            <div className="hidden lg:flex items-center">
               <Button
                 variant="primary"
                 size="md"
@@ -169,7 +173,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center">
+            <div className="lg:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="text-slate-700 hover:text-slate-900 p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 rounded-lg hover:bg-slate-100 transition-colors"
@@ -195,7 +199,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-40 lg:hidden"
               aria-hidden="true"
             />
 
@@ -206,7 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-[64px] inset-x-0 bg-white/98 backdrop-blur-xl border-b border-slate-200/90 shadow-2xl z-40 px-5 pt-3 pb-6 space-y-2 md:hidden max-h-[calc(100vh-64px)] overflow-y-auto"
+              className="fixed top-[64px] sm:top-[80px] inset-x-0 bg-white/98 backdrop-blur-xl border-b border-slate-200/90 shadow-2xl z-40 px-5 pt-3 pb-6 space-y-2 lg:hidden max-h-[calc(100vh-64px)] sm:max-h-[calc(100vh-80px)] overflow-y-auto"
               role="navigation"
               aria-label="Mobile navigation"
             >

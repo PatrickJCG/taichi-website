@@ -4,6 +4,7 @@ import './App.css';
 import { PageLayout } from './components/organisms/PageLayout';
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
+import { NewsPage } from './pages/NewsPage';
 import type { Product } from './data/mockProducts';
 
 export function App() {
@@ -45,6 +46,32 @@ export function App() {
           element={
             <PageLayout inquiryCount={inquiryItems.length}>
               <ProductsPage
+                inquiryItems={inquiryItems}
+                onToggleInquiry={handleToggleInquiry}
+                onRemoveInquiryItem={handleRemoveInquiryItem}
+              />
+            </PageLayout>
+          }
+        />
+
+        {/* ── News & Updates page (/news & /news/:articleId) ── */}
+        <Route
+          path="/news"
+          element={
+            <PageLayout inquiryCount={inquiryItems.length}>
+              <NewsPage
+                inquiryItems={inquiryItems}
+                onToggleInquiry={handleToggleInquiry}
+                onRemoveInquiryItem={handleRemoveInquiryItem}
+              />
+            </PageLayout>
+          }
+        />
+        <Route
+          path="/news/:articleId"
+          element={
+            <PageLayout inquiryCount={inquiryItems.length}>
+              <NewsPage
                 inquiryItems={inquiryItems}
                 onToggleInquiry={handleToggleInquiry}
                 onRemoveInquiryItem={handleRemoveInquiryItem}
