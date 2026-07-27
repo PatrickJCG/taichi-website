@@ -166,8 +166,8 @@ export const NewsPage: React.FC<NewsPageProps> = () => {
               {/* Key Takeaways Callout Card */}
               {activeArticle.keyHighlights && activeArticle.keyHighlights.length > 0 && (
                 <div className="mb-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 text-white border border-brand-teal-500/30 shadow-xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-6 text-brand-teal-400/20 pointer-events-none">
-                    <ShieldCheck className="w-32 h-32" />
+                  <div className="hidden sm:block absolute top-0 right-0 p-6 text-brand-teal-400/10 pointer-events-none">
+                    <ShieldCheck className="w-24 h-24 sm:w-32 sm:h-32" />
                   </div>
                   <div className="relative z-10">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-teal-500/20 border border-brand-teal-400/40 text-brand-teal-300 text-xs font-bold uppercase tracking-wider mb-4">
@@ -176,7 +176,7 @@ export const NewsPage: React.FC<NewsPageProps> = () => {
                     </div>
                     <ul className="space-y-3">
                       {activeArticle.keyHighlights.map((highlight, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-slate-200 text-sm sm:text-base leading-relaxed">
+                        <li key={idx} className="flex items-start gap-3 text-slate-100 text-sm sm:text-base leading-relaxed">
                           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                           <span>{highlight}</span>
                         </li>
@@ -229,12 +229,12 @@ export const NewsPage: React.FC<NewsPageProps> = () => {
               </div>
 
               {/* Technical Specialist Callout CTA */}
-              <div className="mt-12 p-8 rounded-2xl bg-gradient-to-r from-brand-forest-900 to-brand-teal-900 text-white border border-teal-500/30 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="mt-12 p-8 rounded-2xl bg-gradient-to-r from-slate-900 via-brand-forest-900 to-slate-900 text-white border border-teal-400/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="space-y-2 text-center sm:text-left">
-                  <h3 className="text-xl font-bold font-heading">
+                  <h3 className="text-xl sm:text-2xl font-bold font-heading text-white tracking-wide">
                     Interested in Trial Data or Custom Formulations?
                   </h3>
-                  <p className="text-slate-300 text-sm max-w-xl">
+                  <p className="text-teal-100 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
                     Our technical animal nutrition team provides localized trial protocols, mycotoxin profiling, and premix integration advice for feed producers worldwide.
                   </p>
                 </div>
@@ -244,7 +244,7 @@ export const NewsPage: React.FC<NewsPageProps> = () => {
                   href="/#contact"
                   onClick={() => navigate('/#contact')}
                   icon={<MessageSquare className="w-4 h-4" />}
-                  className="shrink-0 shadow-lg shadow-brand-teal-600/30 !bg-brand-teal-600 hover:!bg-brand-teal-500"
+                  className="shrink-0 shadow-lg shadow-brand-teal-600/30 !bg-brand-teal-600 hover:!bg-brand-teal-500 !text-white font-bold"
                 >
                   Contact Specialist
                 </Button>
