@@ -37,8 +37,8 @@ export const Button: React.FC<ButtonProps> = ({
   const variantStyles: Record<NonNullable<ButtonProps['variant']>, string> = {
     // Primary — brand teal (main CTA)
     primary:   'bg-brand-teal-700 hover:bg-brand-teal-800 text-white shadow-md shadow-brand-teal-700/20 hover:shadow-lg hover:-translate-y-0.5',
-    // Secondary — subtle teal fill (card actions)
-    secondary: 'bg-slate-50 hover:bg-brand-teal-700 text-slate-700 hover:text-white border border-slate-200 hover:border-brand-teal-700 shadow-sm',
+    // Secondary — brand teal fill (card actions)
+    secondary: 'bg-brand-teal-700 hover:bg-brand-teal-800 text-white border border-brand-teal-700 shadow-md shadow-brand-teal-700/20 hover:shadow-lg hover:-translate-y-0.5',
     // Outline — transparent bordered (hero secondary)
     outline:   'bg-white hover:bg-slate-100/80 border border-slate-300/80 text-slate-700 hover:text-slate-900 shadow-sm hover:-translate-y-0.5',
     // Ghost — icon-only / minimal

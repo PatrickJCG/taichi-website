@@ -42,11 +42,11 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* 1. Hero carousel */}
       <Hero />
 
-      {/* 2. Our Company intro + stats (anchor: #about) */}
-      <CompanySection />
-
-      {/* 3. Curated product preview — Specialty Products first, 6 cards, "View All" CTA */}
+      {/* 2. Product Catalog section (immediately next to Hero section) */}
       <ProductPreview inquiryItems={inquiryItems} onToggleInquiry={onToggleInquiry} />
+
+      {/* 3. Our Company intro + stats (anchor: #about) */}
+      <CompanySection />
 
       {/* 4. Remaining About content: Mandate, Mission, Values, Timeline, Quality */}
       <AboutSection />

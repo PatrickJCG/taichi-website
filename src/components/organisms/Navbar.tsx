@@ -14,15 +14,16 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navLinks: { name: string; href: string; to?: string }[] = [
-    { name: "Home",            href: "/"         },
-    { name: "About Us",        href: "#about"    },
-    { name: "Product Catalog", href: "/products", to: "/products" },
-    { name: "News & Updates",  href: "/news",     to: "/news" },
-    { name: "Contact",         href: "#contact"  },
+  // Navigation Links: Product Catalog is second to Home
+  const navLinks: { name: string; href: string; to?: string; sectionId: string }[] = [
+    { name: 'Home',            href: '/',         sectionId: 'home' },
+    { name: 'Product Catalog', href: '/products', to: '/products', sectionId: 'products' },
+    { name: 'About Us',        href: '#about',    sectionId: 'about' },
+    { name: 'News & Updates',  href: '/news',     to: '/news', sectionId: 'news' },
+    { name: 'Contact',         href: '#contact',  sectionId: 'contact' },
   ];
 
-  // Track active section via IntersectionObserver for aria-current
+  // Track active page / section in the window
   useEffect(() => {
     if (location.pathname === '/products') {
       setActiveSection('products');
@@ -32,20 +33,40 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
       setActiveSection('news');
       return;
     }
-    const hashLinks = navLinks.filter(l => l.href.startsWith('#'));
-    const sections = hashLinks.map(l => document.querySelector(l.href));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+
+    if (location.pathname === '/') {
+      const handleScroll = () => {
+        if (window.scrollY < 180) {
+          setActiveSection('home');
+          return;
+        }
+
+        const sections = [
+          { id: 'products', el: document.getElementById('products') },
+          { id: 'company',  el: document.getElementById('company') },
+          { id: 'about',    el: document.getElementById('about') },
+          { id: 'news',     el: document.getElementById('news') },
+          { id: 'contact',  el: document.getElementById('contact') },
+        ];
+
+        const scrollPosition = window.scrollY + 140;
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const section = sections[i];
+          if (section.el) {
+            const top = section.el.offsetTop;
+            if (scrollPosition >= top) {
+              setActiveSection(section.id);
+              break;
+            }
           }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    sections.forEach(s => s && observer.observe(s));
-    return () => observer.disconnect();
+        }
+      };
+
+      handleScroll();
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, [location.pathname]);
 
   // Lock body scroll when mobile menu is open
@@ -96,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/70 shadow-sm transition-all duration-300">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
 
@@ -104,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
             <Link
               to="/"
               onClick={handleHomeClick}
-              className="flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-teal-500 rounded-lg"
+              className="flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 rounded-lg"
               aria-label="Tai Chi Newtech Inc. — Return to home"
             >
               <img
@@ -115,25 +136,26 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
             </Link>
 
             {/* Desktop Nav Links */}
-            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8" aria-label="Main navigation">
+            <nav className="hidden lg:flex items-center space-x-2 xl:space-x-3" aria-label="Main navigation">
               {navLinks.map((link) => {
-                const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
-                const isActive = activeSection === sectionId;
+                const isActive = activeSection === link.sectionId;
                 const linkClass = [
-                  'font-semibold text-sm transition-colors duration-300 relative py-1 group',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 focus-visible:ring-offset-2 rounded-sm',
-                  isActive ? 'text-brand-teal-700' : 'text-slate-600 hover:text-brand-teal-700',
+                  'relative font-bold text-sm transition-all duration-200 px-3.5 py-2 rounded-xl flex items-center gap-1.5 cursor-pointer select-none',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2',
+                  isActive
+                    ? 'text-teal-900 bg-teal-50/90 border border-teal-200/80 font-extrabold shadow-sm'
+                    : 'text-slate-700 hover:text-teal-800 hover:bg-slate-50',
                 ].join(' ');
-                const underlineClass = [
-                  'absolute bottom-0 left-0 h-0.5 bg-brand-teal-600 transition-all duration-300 ease-out rounded-full',
-                  isActive ? 'w-full' : 'w-0 group-hover:w-full',
-                ].join(' ');
+
+                const underline = isActive && (
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-gradient-to-r from-teal-600 via-emerald-500 to-teal-600 rounded-full shadow-[0_0_8px_rgba(13,148,136,0.6)]" />
+                );
 
                 if (link.to) {
                   return (
                     <Link key={link.name} to={link.to} aria-current={isActive ? 'page' : undefined} className={linkClass}>
                       <span>{link.name}</span>
-                      <span className={underlineClass} />
+                      {underline}
                     </Link>
                   );
                 }
@@ -141,7 +163,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
                   return (
                     <Link key={link.name} to="/" onClick={handleHomeClick} aria-current={isActive ? 'page' : undefined} className={linkClass}>
                       <span>{link.name}</span>
-                      <span className={underlineClass} />
+                      {underline}
                     </Link>
                   );
                 }
@@ -154,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
                     className={linkClass}
                   >
                     <span>{link.name}</span>
-                    <span className={underlineClass} />
+                    {underline}
                   </a>
                 );
               })}
@@ -176,7 +198,7 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
             <div className="lg:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-slate-700 hover:text-slate-900 p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal-500 rounded-lg hover:bg-slate-100 transition-colors"
+                className="text-slate-700 hover:text-slate-900 p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 rounded-lg hover:bg-slate-100 transition-colors"
                 aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
                 aria-expanded={isOpen}
                 aria-controls="mobile-nav"
@@ -215,14 +237,15 @@ export const Navbar: React.FC<NavbarProps> = ({ inquiryCount }) => {
               aria-label="Mobile navigation"
             >
               {navLinks.map((link) => {
-                const sectionId = link.href.startsWith('#') ? link.href.replace('#', '') : link.href.replace('/', '') || 'home';
-                const isActive = activeSection === sectionId;
+                const isActive = activeSection === link.sectionId;
                 const mobileLinkClass = [
-                  'flex items-center font-semibold text-base py-3 transition-all rounded-xl px-3 min-h-[44px]',
-                  'focus-visible:ring-2 focus-visible:ring-brand-teal-500 focus-visible:ring-offset-1 outline-none',
-                  isActive ? 'text-brand-teal-700 bg-brand-teal-50/90 pl-4' : 'text-slate-700 hover:text-brand-teal-700 hover:bg-slate-50 hover:pl-4',
+                  'flex items-center font-bold text-base py-3 px-4 transition-all rounded-xl min-h-[44px]',
+                  'focus-visible:ring-2 focus-visible:ring-teal-600 outline-none',
+                  isActive
+                    ? 'text-teal-900 bg-teal-50 border border-teal-200/80 font-extrabold shadow-sm'
+                    : 'text-slate-700 hover:text-teal-800 hover:bg-slate-50',
                 ].join(' ');
-                const dot = isActive && <span className="w-2 h-2 rounded-full bg-brand-teal-600 mr-2.5 shrink-0" aria-hidden />;
+                const dot = isActive && <span className="w-2.5 h-2.5 rounded-full bg-teal-600 mr-2.5 shrink-0 shadow-sm" aria-hidden />;
 
                 if (link.to) {
                   return (

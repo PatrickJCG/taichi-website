@@ -162,13 +162,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="absolute left-0 top-6 bottom-6 w-1 rounded-full bg-gradient-to-b from-teal-400 via-emerald-400 to-teal-600 shadow-[0_0_10px_rgba(45,212,191,0.6)]" />
 
               <div className="pl-4 space-y-4">
-                {/* Live status badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/15 border border-teal-400/40 text-xs font-bold tracking-wider uppercase text-teal-300 backdrop-blur-sm shadow-[0_0_12px_rgba(20,184,166,0.25)]">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                  Technical Support Available
-                </div>
-
-                <h3 className="text-xl font-extrabold text-white leading-snug font-heading">
+                <h3 className="text-xl font-extrabold text-white leading-snug font-heading tracking-tight">
                   Connect with Our<br />Expert Technical Team
                 </h3>
 

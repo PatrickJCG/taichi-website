@@ -56,15 +56,15 @@ export const ScannableMetricsTable: React.FC = () => {
       {/* Section intro */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/20 border border-teal-400/40 text-teal-200 text-xs font-bold uppercase tracking-widest">
-            <FlaskConical className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-800 text-white text-xs font-extrabold uppercase tracking-widest shadow-sm">
+            <FlaskConical className="w-3.5 h-3.5 text-teal-200" />
             <span>Scannable Science</span>
           </div>
-          <p className="text-sm text-slate-400 italic">
+          <p className="text-sm text-slate-700 font-semibold italic">
             Field-trial benchmarks · ISO-verified data · Per-species efficacy
           </p>
         </div>
-        <div className="sm:hidden text-xs text-teal-300/80 font-medium flex items-center gap-1">
+        <div className="sm:hidden text-xs text-teal-800 font-bold flex items-center gap-1">
           <span>← Swipe table →</span>
         </div>
       </div>
@@ -82,10 +82,10 @@ export const ScannableMetricsTable: React.FC = () => {
                 <th key={col.key} scope="col">
                   <div className="flex flex-col items-center gap-0.5">
                     <div className="flex items-center gap-1.5 justify-center">
-                      {col.icon}
-                      <span>{col.label}</span>
+                      <span className="text-emerald-300">{col.icon}</span>
+                      <span className="text-white font-extrabold">{col.label}</span>
                     </div>
-                    <span style={{ opacity: 0.6, fontSize: '0.65rem', fontWeight: 400, textTransform: 'none', letterSpacing: '0' }}>
+                    <span className="text-emerald-200 font-bold text-[11px] uppercase tracking-wider">
                       {col.sublabel}
                     </span>
                   </div>
@@ -110,8 +110,8 @@ export const ScannableMetricsTable: React.FC = () => {
                       {row.icon}
                     </span>
                     <div>
-                      {/* text-slate-100: bright white-ish — readable on dark teal row */}
-                      <div className="font-bold text-slate-100 text-sm">{row.species}</div>
+                      {/* text-white: bright white — high contrast on dark teal row */}
+                      <div className="font-extrabold text-white text-sm">{row.species}</div>
                     </div>
                   </div>
                 </td>
@@ -130,7 +130,7 @@ export const ScannableMetricsTable: React.FC = () => {
 
                 {/* Certifications — plain text, light on dark bg */}
                 <td>
-                  <span className="text-xs text-slate-300 font-medium leading-snug">
+                  <span className="text-xs text-slate-100 font-bold leading-snug">
                     {row.certifications}
                   </span>
                 </td>
@@ -140,8 +140,8 @@ export const ScannableMetricsTable: React.FC = () => {
         </table>
       </div>
 
-      {/* Footer disclaimer — light text on dark bg */}
-      <p className="mt-3 text-xs text-slate-400 italic leading-relaxed">
+      {/* Footer disclaimer — dark text on light bg for max accessibility */}
+      <p className="mt-3 text-xs text-slate-700 font-medium italic leading-relaxed">
         * Data sourced from controlled field trials (n &ge; 500 animals per group, &ge; 90 days duration). FCR &amp; ADG improvements are relative to unsupplemented control groups under equivalent husbandry conditions. Individual results may vary.
       </p>
     </motion.div>

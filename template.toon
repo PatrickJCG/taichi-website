@@ -1,0 +1,114 @@
+# TOON: Token-Oriented Object Notation
+# Schema & Component Architecture: Tai Chi Newtech Web Application
+
+meta
+  name: Tai Chi Newtech Inc. Showcase Application
+  version: 1.0.0
+  framework: React 18 + Vite + Tailwind CSS + Framer Motion
+  routing: React Router DOM (v6)
+
+design_tokens
+  typography
+    font_family
+      sans: Inter, system-ui, sans-serif
+      heading: Plus Jakarta Sans, Inter, sans-serif
+      mono: JetBrains Mono, monospace
+  colors
+    teal
+      50: "#F0FDFA"
+      100: "#CCFBF1"
+      200: "#99F6E4"
+      300: "#5EEAD4"
+      500: "#14B8A6"
+      600: "#0D9488"
+      700: "#0F766E"
+      800: "#115E59"
+      900: "#134E4A"
+    forest
+      50: "#F0FDF4"
+      100: "#DCFCE7"
+      200: "#A7F3C0"
+      400: "#4ADE80"
+      500: "#2D6A4F"
+      600: "#1F5C42"
+      700: "#1A4A35"
+      800: "#163D2C"
+      900: "#0D2B1D"
+    amber
+      50: "#FFFBEB"
+      100: "#FEF3C7"
+      200: "#FDE68A"
+      300: "#FCD34D"
+      400: "#FBBF24"
+      500: "#F59E0B"
+      600: "#D97706"
+      700: "#B45309"
+      800: "#92400E"
+      900: "#78350F"
+    navy
+      700: "#162840"
+      800: "#112031"
+      900: "#0D1B2A"
+  shadows
+    teal_glow: "0 0 24px -4px rgba(13, 148, 136, 0.35)"
+    forest_glow: "0 0 24px -4px rgba(45, 106, 79, 0.35)"
+    amber_glow: "0 0 24px -4px rgba(245, 158, 11, 0.30)"
+  responsive_breakpoints
+    sm: 640px
+    md: 768px
+    lg: 1024px
+    xl: 1280px
+
+routes
+  - path: "/"
+    page: HomePage
+    sections: [Navbar, HeroCarousel, AboutSection, ProductPreview, QualityCertifications, NewsSection, ContactSection, Footer]
+  - path: "/products"
+    page: ProductsPage
+    sections: [Navbar, ProductCatalog, ScannableMetricsTable, Footer]
+  - path: "/news"
+    page: NewsPage (Index View)
+    sections: [Navbar, NewsHeroSearch, FeaturedSpotlight, CategoryTabs, NewsGrid, Footer]
+  - path: "/news/:articleId"
+    page: NewsPage (Reader View)
+    sections: [Navbar, ArticleHeader, BannerImage, KeyTakeawaysCard, ArticleBody, SpecialistCTA, RelatedArticles, Footer]
+
+structural_components
+  atoms
+    Button
+      props: [variant (primary|outline|ghost), size (sm|md|lg), href, onClick, icon, fullWidth, className]
+    SectionHeader
+      props: [tag, title, description, centered, className]
+    Badge
+      props: [variant (speciesBlue|sectionTag|certification), children, icon, className]
+
+  molecules
+    HeroCarousel
+      features: [Auto-slide timer, Touch swipe, Crossfade transitions, Direct CTA routing, Dot/Tab indicators]
+    ProductCard
+      props: [product, dark, isAddedToInquiry, onToggleInquiry]
+      sub_elements: [Category badge, Species pills, FCR & Daily Gain metric chips, Inquiry button]
+    NewsCard
+      props: [article, delay]
+      sub_elements: [Category badge, Timestamp & ReadTime, Title link, Summary, Read article link]
+    CategoryTab
+      props: [label, isActive, onClick, layoutId, count]
+      sub_elements: [Dynamic species/function SVG icon, Framer Motion active pill indicator]
+    ScannableMetricsTable
+      features: [Sticky column headers, Performance benchmark pills (best|std|info), Tabular figures]
+
+  organisms
+    Navbar
+      props: [inquiryCount]
+      features: [Sticky top backdrop blur, Responsive lg (1024px) breakpoint, Mobile drawer overlay]
+    ProductCatalog
+      props: [inquiryItems, onToggleInquiry]
+      features: [Multi-dimensional filtering (Function | Species | Combined), Parallax SVG molecular models, Reset controls]
+    NewsSection
+      features: [Featured news grid, View All Updates routing button]
+    AboutSection
+      features: [Company history, Core pillars, Scientific agenda tabs]
+    ContactSection
+      features: [Inquiry cart drawer / modal, Interactive submission form, Contact detail cards]
+    Footer
+      features: [Brand overview, Categorized navigation links, Standards & Certifications pill strip, Copyright]

@@ -1,114 +1,58 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MOCK_CATEGORIES, MOCK_FUNCTION_CATEGORIES, MOCK_PRODUCTS } from '../../data/mockProducts';
 import type { Product } from '../../data/mockProducts';
-import { SectionHeader } from '../atoms';
-import { CategoryTab, ProductCard, ScannableMetricsTable } from '../molecules';
-import { PawPrint, Sparkles, SlidersHorizontal, RotateCcw, SearchX } from 'lucide-react';
+import { ProductCard, ScannableMetricsTable } from '../molecules';
+import {
+  PawPrint,
+  Sparkles,
+  RotateCcw,
+  SearchX,
+  Search,
+  X,
+  Bird,
+  Fish,
+  ShieldCheck,
+  FlaskConical,
+  Boxes,
+  Grid as GridIcon,
+  Send,
+} from 'lucide-react';
 
-// ─── Transparent Ball-and-Stick Molecular Model (SVG) ──────────────────────
-interface MoleculeProps { rotate?: number; opacity?: number }
-
-const MoleculeModel: React.FC<MoleculeProps> = ({ rotate = 0, opacity = 1 }) => (
+// ─── Swine SVG Icon ──────────────────────────────────────────────────────────
+const SwineIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
   <svg
-    viewBox="0 0 400 400"
+    viewBox="0 0 24 24"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full h-full"
-    style={{ transform: `rotate(${rotate}deg)`, opacity }}
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
     aria-hidden="true"
   >
-    <defs>
-      {/* Atom sphere gradients – 3-D glass look */}
-      <radialGradient id="atTeal" cx="32%" cy="28%" r="70%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-        <stop offset="30%" stopColor="#5EEAD4" stopOpacity="0.7" />
-        <stop offset="75%" stopColor="#0D9488" stopOpacity="0.55" />
-        <stop offset="100%" stopColor="#0F766E" stopOpacity="0.8" />
-      </radialGradient>
-      <radialGradient id="atEm" cx="32%" cy="28%" r="70%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-        <stop offset="30%" stopColor="#6EE7B7" stopOpacity="0.7" />
-        <stop offset="75%" stopColor="#059669" stopOpacity="0.55" />
-        <stop offset="100%" stopColor="#047857" stopOpacity="0.8" />
-      </radialGradient>
-      <radialGradient id="atAmb" cx="32%" cy="28%" r="70%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-        <stop offset="30%" stopColor="#FCD34D" stopOpacity="0.7" />
-        <stop offset="75%" stopColor="#F59E0B" stopOpacity="0.55" />
-        <stop offset="100%" stopColor="#B45309" stopOpacity="0.8" />
-      </radialGradient>
-      <radialGradient id="atGray" cx="32%" cy="28%" r="70%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-        <stop offset="40%" stopColor="#CBD5E1" stopOpacity="0.7" />
-        <stop offset="100%" stopColor="#64748B" stopOpacity="0.6" />
-      </radialGradient>
-
-      <linearGradient id="bondH" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.25" />
-        <stop offset="50%" stopColor="#99F6E4" stopOpacity="0.55" />
-        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.25" />
-      </linearGradient>
-      <linearGradient id="bondD" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.25" />
-        <stop offset="50%" stopColor="#6EE7B7" stopOpacity="0.55" />
-        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.25" />
-      </linearGradient>
-
-      <filter id="atomShadow" x="-30%" y="-30%" width="160%" height="160%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#0D9488" floodOpacity="0.35" />
-      </filter>
-    </defs>
-
-    {/* Bonds */}
-    <line x1="200" y1="80" x2="270" y2="120" stroke="url(#bondH)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="270" y1="120" x2="270" y2="200" stroke="url(#bondH)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="270" y1="200" x2="200" y2="240" stroke="url(#bondH)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="200" y1="240" x2="130" y2="200" stroke="url(#bondH)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="130" y1="200" x2="130" y2="120" stroke="url(#bondH)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="130" y1="120" x2="200" y2="80" stroke="url(#bondH)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="200" y1="88" x2="263" y2="124" stroke="#ffffff" strokeWidth="3" strokeDasharray="7 5" opacity="0.55" />
-    <line x1="263" y1="196" x2="200" y2="232" stroke="#ffffff" strokeWidth="3" strokeDasharray="7 5" opacity="0.55" />
-    <line x1="137" y1="124" x2="137" y2="196" stroke="#ffffff" strokeWidth="3" strokeDasharray="7 5" opacity="0.55" />
-    <line x1="200" y1="80" x2="200" y2="28" stroke="url(#bondD)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="270" y1="120" x2="330" y2="88" stroke="url(#bondD)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="270" y1="200" x2="330" y2="232" stroke="url(#bondD)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="130" y1="120" x2="70" y2="88" stroke="url(#bondD)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="200" y1="240" x2="200" y2="300" stroke="url(#bondD)" strokeWidth="9" strokeLinecap="round" />
-    <line x1="130" y1="200" x2="70" y2="232" stroke="url(#bondD)" strokeWidth="9" strokeLinecap="round" />
-
-    {/* Atoms */}
-    <circle cx="200" cy="80" r="26" fill="url(#atTeal)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="270" cy="120" r="26" fill="url(#atTeal)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="270" cy="200" r="26" fill="url(#atTeal)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="200" cy="240" r="26" fill="url(#atTeal)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="130" cy="200" r="26" fill="url(#atTeal)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="130" cy="120" r="26" fill="url(#atTeal)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    {[[200, 80], [270, 120], [270, 200], [200, 240], [130, 200], [130, 120]].map(([cx, cy], i) => (
-      <ellipse key={i} cx={cx - 8} cy={cy - 8} rx={8} ry={5} fill="white" opacity="0.7" transform={`rotate(-30,${cx - 8},${cy - 8})`} />
-    ))}
-    <circle cx="200" cy="28" r="20" fill="url(#atGray)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="330" cy="88" r="22" fill="url(#atAmb)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="330" cy="232" r="22" fill="url(#atEm)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="70" cy="88" r="22" fill="url(#atEm)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="200" cy="300" r="22" fill="url(#atAmb)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <circle cx="70" cy="232" r="18" fill="url(#atGray)" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" filter="url(#atomShadow)" />
-    <ellipse cx="192" cy="21" rx="6" ry="3.5" fill="white" opacity="0.72" />
-    <ellipse cx="322" cy="81" rx="7" ry="4" fill="white" opacity="0.72" />
-    <ellipse cx="322" cy="225" rx="7" ry="4" fill="white" opacity="0.72" />
-    <ellipse cx="62" cy="81" rx="7" ry="4" fill="white" opacity="0.72" />
-    <ellipse cx="192" cy="293" rx="7" ry="4" fill="white" opacity="0.72" />
-    <text x="330" y="93" textAnchor="middle" fill="#78350F" fontSize="12" fontWeight="800" fontFamily="sans-serif" opacity="0.85">O</text>
-    <text x="70" y="93" textAnchor="middle" fill="#064E3B" fontSize="12" fontWeight="800" fontFamily="sans-serif" opacity="0.85">N</text>
-    <text x="330" y="237" textAnchor="middle" fill="#064E3B" fontSize="12" fontWeight="800" fontFamily="sans-serif" opacity="0.85">N</text>
-    <text x="200" y="305" textAnchor="middle" fill="#78350F" fontSize="12" fontWeight="800" fontFamily="sans-serif" opacity="0.85">O</text>
-    <text x="200" y="33" textAnchor="middle" fill="#475569" fontSize="11" fontWeight="800" fontFamily="sans-serif" opacity="0.75">H</text>
+    <path d="M19 11c0-3.867-3.133-7-7-7a7 7 0 0 0-7 7c0 2.87 1.73 5.335 4.2 6.42L8.5 20.5a1 1 0 0 0 1.4 1.3l1.8-1.8a7.02 7.02 0 0 0 4.6 0l1.8 1.8a1 1 0 0 0 1.4-1.3l-.7-3.08A7.006 7.006 0 0 0 19 11z" />
+    <circle cx="10" cy="10" r="1" />
+    <circle cx="14" cy="10" r="1" />
+    <ellipse cx="12" cy="13" rx="2" ry="1.2" />
   </svg>
 );
 
-type FilterMode = 'species' | 'function' | 'combined';
+const getCategoryIcon = (category: string) => {
+  const norm = category.toLowerCase();
+  if (norm.includes('swine'))       return <SwineIcon    className="w-4 h-4 text-emerald-600" />;
+  if (norm.includes('poultry'))     return <Bird         className="w-4 h-4 text-teal-600" />;
+  if (norm.includes('pet'))         return <PawPrint     className="w-4 h-4 text-emerald-700" />;
+  if (norm.includes('aqua'))        return <Fish         className="w-4 h-4 text-cyan-600" />;
+  if (norm.includes('functional'))  return <ShieldCheck  className="w-4 h-4 text-emerald-600" />;
+  if (norm.includes('nutritional')) return <FlaskConical className="w-4 h-4 text-teal-600" />;
+  if (norm.includes('specialty'))   return <Sparkles     className="w-4 h-4 text-amber-500" />;
+  if (norm.includes('commodity'))   return <Boxes        className="w-4 h-4 text-slate-600" />;
+  return <GridIcon className="w-4 h-4 text-slate-500" />;
+};
 
-// ─── Main Component ────────────────────────────────────────────────────────
+type FilterMode = 'function' | 'species' | 'combined';
+
 export interface ProductCatalogProps {
   inquiryItems: Product[];
   onToggleInquiry: (product: Product) => void;
@@ -116,95 +60,75 @@ export interface ProductCatalogProps {
 
 export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   inquiryItems,
-  onToggleInquiry
+  onToggleInquiry,
 }) => {
   const [filterMode, setFilterMode] = useState<FilterMode>('function');
   const [activeSpecies, setActiveSpecies] = useState('All');
   const [activeFunction, setActiveFunction] = useState('All');
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const handleFilter = (e: Event) => {
+    const handleFilterSpecies = (e: Event) => {
       const spec = (e as CustomEvent).detail;
       setActiveSpecies(spec);
       setFilterMode('species');
-      const target = document.getElementById('products');
-      if (target) {
-        // Offset slightly to account for sticky navbar header
-        const offset = 80;
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const elementRect = target.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
+      scrollToProducts();
     };
 
     const handleFilterFunction = (e: Event) => {
       const func = (e as CustomEvent).detail;
       setActiveFunction(func);
       setFilterMode('function');
+      scrollToProducts();
+    };
+
+    const scrollToProducts = () => {
       const target = document.getElementById('products');
       if (target) {
         const offset = 80;
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = target.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
+        const offsetPosition = elementRect - bodyRect - offset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
       }
     };
 
-    window.addEventListener('filter-species', handleFilter);
+    window.addEventListener('filter-species', handleFilterSpecies);
     window.addEventListener('filter-function', handleFilterFunction);
     return () => {
-      window.removeEventListener('filter-species', handleFilter);
+      window.removeEventListener('filter-species', handleFilterSpecies);
       window.removeEventListener('filter-function', handleFilterFunction);
     };
   }, []);
 
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-
-  // Parallax transforms
-  const mol1Y = useTransform(scrollYProgress, [0, 1], [-160, 160]);
-  const mol2Y = useTransform(scrollYProgress, [0, 1], [160, -160]);
-  const mol1Rot = useTransform(scrollYProgress, [0, 1], [-15, 15]);
-  const mol2Rot = useTransform(scrollYProgress, [0, 1], [15, -15]);
-  const orb1Y = useTransform(scrollYProgress, [0, 1], [-80, 80]);
-  const orb2Y = useTransform(scrollYProgress, [0, 1], [80, -80]);
-  const headerY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
-
-
-
   const speciesOptions = ['All', ...MOCK_CATEGORIES];
   const functionOptions = ['All', ...MOCK_FUNCTION_CATEGORIES];
 
-  // Multi-dimensional filtering logic
+  // Filtering Logic
   const filtered = MOCK_PRODUCTS.filter(product => {
+    const matchesSearch =
+      searchQuery === '' ||
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.speciesTags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+
     const matchesSpecies = activeSpecies === 'All' || product.category === activeSpecies;
     const matchesFunction = activeFunction === 'All' || product.functionCategory === activeFunction;
 
+    if (!matchesSearch) return false;
     if (filterMode === 'species') return matchesSpecies;
     if (filterMode === 'function') return matchesFunction;
     return matchesSpecies && matchesFunction;
   });
 
-  const isFiltered = activeSpecies !== 'All' || activeFunction !== 'All';
+  const isFiltered = activeSpecies !== 'All' || activeFunction !== 'All' || searchQuery !== '';
 
   const resetFilters = () => {
     setActiveSpecies('All');
     setActiveFunction('All');
+    setSearchQuery('');
   };
 
-  // Helper count functions
   const getSpeciesCount = (spec: string) => {
     if (spec === 'All') return MOCK_PRODUCTS.length;
     return MOCK_PRODUCTS.filter(p => p.category === spec).length;
@@ -215,284 +139,296 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     return MOCK_PRODUCTS.filter(p => p.functionCategory === func).length;
   };
 
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section
-      ref={sectionRef}
       id="products"
-      className="relative overflow-hidden border-b border-teal-900/60"
+      className="relative overflow-hidden py-20 sm:py-24 border-b border-slate-200/80"
       style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(160deg, #071520 0%, #083D32 22%, #0D5E4E 42%, #0A4035 62%, #06231D 80%, #071520 100%)',
+        background:
+          'linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 45%, #ECFDF5 100%)',
       }}
     >
-      {/* ── Diagonal accent band ──────────────────────── */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'linear-gradient(110deg, transparent 0%, rgba(13,148,136,0.10) 35%, rgba(45,106,79,0.08) 55%, transparent 80%)'
-        }}
-        aria-hidden
-      />
+      {/* ── Top Subtle Glow Divider ─────────────────────────────── */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-teal-500/40 to-transparent" />
 
-      {/* ── Line-grid overlay ──────────────────────── */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: [
-            'linear-gradient(to right, rgba(94,234,212,0.06) 1px, transparent 1px)',
-            'linear-gradient(to bottom, rgba(94,234,212,0.06) 1px, transparent 1px)',
-          ].join(', '),
-          backgroundSize: '48px 48px',
-        }}
-        aria-hidden
-      />
+      {/* ── Bio-Science Feed Additive SVG Background Pattern ── */}
+      <div className="absolute inset-0 pointer-events-none opacity-40 overflow-hidden" aria-hidden="true">
+        <svg className="w-full h-full" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="feedAdditivePatternCatalog" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path
+                d="M 30 0 L 60 17.32 L 60 51.96 L 30 69.28 L 0 51.96 L 0 17.32 Z"
+                fill="none"
+                stroke="rgba(13, 148, 136, 0.12)"
+                strokeWidth="1"
+              />
+              <circle cx="30" cy="0" r="2.5" fill="rgba(5, 150, 105, 0.18)" />
+              <circle cx="60" cy="17.32" r="2" fill="rgba(13, 148, 136, 0.15)" />
+              <circle cx="0" cy="17.32" r="2" fill="rgba(13, 148, 136, 0.15)" />
+              <circle cx="30" cy="34.64" r="3" fill="rgba(16, 185, 129, 0.22)" />
+              <line x1="30" y1="0" x2="30" y2="34.64" stroke="rgba(13, 148, 136, 0.1)" strokeWidth="0.8" strokeDasharray="2 2" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#feedAdditivePatternCatalog)" />
+        </svg>
+      </div>
 
-      {/* ── Ambient glow orbs ───────────────────── */}
-      <motion.div
-        style={{ y: orb1Y }}
-        className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full pointer-events-none"
-        aria-hidden
-      >
-        <div className="w-full h-full rounded-full" style={{
-          background: 'radial-gradient(circle, rgba(13,148,136,0.50) 0%, rgba(15,118,110,0.22) 45%, transparent 70%)'
-        }} />
-      </motion.div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-      <motion.div
-        style={{ y: orb2Y }}
-        className="absolute -bottom-32 -right-32 w-[700px] h-[700px] rounded-full pointer-events-none"
-        aria-hidden
-      >
-        <div className="w-full h-full rounded-full" style={{
-          background: 'radial-gradient(circle, rgba(45,106,79,0.45) 0%, rgba(26,74,53,0.20) 45%, transparent 70%)'
-        }} />
-      </motion.div>
-
-      <motion.div
-        style={{ y: orb2Y }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-        aria-hidden
-      >
-        <div className="w-full h-full rounded-full" style={{
-          background: 'radial-gradient(circle, rgba(20,184,166,0.18) 0%, transparent 65%)'
-        }} />
-      </motion.div>
-
-      {/* ── Parallax Molecule Models ───────────────── */}
-      <motion.div
-        style={{ y: mol1Y, rotate: mol1Rot }}
-        className="absolute -top-16 -left-24 sm:-left-8 w-[380px] h-[380px] sm:w-[520px] sm:h-[520px] z-0 pointer-events-none"
-        aria-hidden
-      >
-        <div className="absolute inset-16 rounded-full blur-2xl" style={{ background: 'radial-gradient(circle, rgba(13,148,136,0.35) 0%, transparent 70%)' }} />
-        <MoleculeModel opacity={0.65} />
-      </motion.div>
-
-      <motion.div
-        style={{ y: mol2Y, rotate: mol2Rot }}
-        className="absolute -bottom-16 -right-24 sm:-right-8 w-[400px] h-[400px] sm:w-[540px] sm:h-[540px] z-0 pointer-events-none"
-        aria-hidden
-      >
-        <div className="absolute inset-16 rounded-full blur-2xl" style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.20) 0%, rgba(13,148,136,0.20) 50%, transparent 70%)' }} />
-        <MoleculeModel rotate={180} opacity={0.60} />
-      </motion.div>
-
-      {/* ── Content ───────────────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-
-        {/* Section Header */}
-        <motion.div style={{ y: headerY }}>
-          <SectionHeader
-            tag="Product Catalog"
-            title="Precision-Engineered Feed Additive Solutions"
-            description="Science-backed premix formulations crafted for performance, safety, and species-specific efficacy."
-            className="mb-10
-              [&_.section-tag]:bg-teal-400/15
-              [&_.section-tag]:text-teal              [&_.section-tag]:border-teal-400/40
-              [&_.section-tag]:backdrop-blur-sm
-              [&_h2]:text-white
-              [&_h2]:drop-shadow-lg
-              [&_p]:text-slate-200
-              [&_span]:bg-gradient-to-r
-              [&_span]:from-teal-400
-              [&_span]:to-emerald-400"
-          />
-        </motion.div>
-
-        {/* ── Filter Control Panel ────────────────────────────────────── */}
-        <div className="max-w-4xl mx-auto mb-10 bg-slate-900/60 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/10 shadow-2xl">
-
-          {/* Top Segmented Mode Selector */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-white/10">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-300">
-              <SlidersHorizontal className="w-4 h-4 text-teal-400" />
-              <span>Catalog Navigation</span>
-            </div>
-
-            {/* Mode Switcher Tabs */}
-            <div className="flex items-center p-1 bg-black/40 rounded-xl border border-white/10">
-              <button
-                onClick={() => setFilterMode('function')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filterMode === 'function'
-                  ? 'bg-teal-600 text-white shadow-md'
-                  : 'text-slate-300 hover:text-white'
-                  }`}
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>By Function</span>
-              </button>
-
-              <button
-                onClick={() => setFilterMode('species')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filterMode === 'species'
-                  ? 'bg-teal-600 text-white shadow-md'
-                  : 'text-slate-300 hover:text-white'
-                  }`}
-              >
-                <PawPrint className="w-3.5 h-3.5" />
-                <span>By Species</span>
-              </button>
-
-              <button
-                onClick={() => setFilterMode('combined')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filterMode === 'combined'
-                  ? 'bg-amber-500 text-white shadow-md'
-                  : 'text-slate-300 hover:text-white'
-                  }`}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>Combined View</span>
-              </button>
-            </div>
+        {/* ── PRODUCT CATALOG HERO HEADER DESIGN BANNER ── */}
+        <div className="mb-12 text-center relative max-w-4xl mx-auto space-y-4 pt-2">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-950 text-teal-200 border border-teal-700/60 text-xs font-extrabold uppercase tracking-widest shadow-md">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span>Product Catalog & Formulations</span>
           </div>
 
-          {/* Category Filter Rows depending on Mode */}
-          <div className="space-y-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-heading leading-tight max-w-3xl mx-auto">
+            Precision Animal <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 via-emerald-600 to-teal-900">Feed Additives</span>
+          </h2>
 
-            {/* Function Filter Row */}
+          <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+            Science-backed premix formulations crafted for high efficacy, biosecurity, and species-specific performance across livestock and aquaculture.
+          </p>
+
+          <div className="w-24 h-1 bg-gradient-to-r from-teal-500 via-emerald-400 to-teal-600 rounded-full mx-auto shadow-sm pt-0.5" />
+        </div>
+
+        {/* ── BALANCED MINIMALISTIC CATALOG FILTER PANEL ── */}
+        <div className="relative rounded-2xl p-6 sm:p-7 shadow-xl border-[3px] border-teal-900 bg-white mb-14 space-y-5 overflow-hidden">
+          
+          <div className="relative z-10 space-y-4">
+            
+            {/* Top Control Bar: Search Input + Mode Tabs + Reset */}
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+              
+              {/* Minimalist Search Bar */}
+              <div className="flex-1 max-w-xl relative">
+                <div className="relative">
+                  <Search className="w-4 h-4 text-teal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search formulations by name, ingredient, or species..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 transition-all shadow-inner"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                      title="Clear search"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Minimalist Mode Selector Tabs & Reset */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="p-1 bg-slate-900 rounded-xl flex items-center gap-1 border border-slate-800 shadow-inner">
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode('function')}
+                    className={`py-2 px-3.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none active:scale-95 ${
+                      filterMode === 'function'
+                        ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold shadow-md'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    By Function
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode('species')}
+                    className={`py-2 px-3.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none active:scale-95 ${
+                      filterMode === 'species'
+                        ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold shadow-md'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    By Species
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFilterMode('combined')}
+                    className={`py-2 px-3.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none active:scale-95 ${
+                      filterMode === 'combined'
+                        ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold shadow-md'
+                        : 'text-slate-300 hover:text-white'
+                    }`}
+                  >
+                    All
+                  </button>
+                </div>
+
+                {isFiltered && (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-extrabold transition-all border border-slate-800 cursor-pointer active:scale-95 shadow-sm"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-teal-400" />
+                    <span>Reset</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Category Pill Buttons */}
             {(filterMode === 'function' || filterMode === 'combined') && (
-              <div className="space-y-2">
-                {filterMode === 'combined' && (
-                  <div className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Product Function / Type:</span>
-                  </div>
-                )}
-                <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter products by function">
-                  {functionOptions.map(func => (
-                    <CategoryTab
-                      key={`func-${func}`}
-                      label={func === 'All' ? 'All Functions' : func}
-                      isActive={activeFunction === func}
+              <div className="flex flex-wrap gap-2.5 pt-2">
+                {functionOptions.map(func => {
+                  const isActive = activeFunction === func;
+                  const count = getFunctionCount(func);
+                  return (
+                    <button
+                      type="button"
+                      key={`minimal-func-${func}`}
                       onClick={() => setActiveFunction(func)}
-                      layoutId="activeFunctionTab"
-                      count={getFunctionCount(func)}
-                    />
-                  ))}
-                </div>
+                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
+                        isActive
+                          ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white font-extrabold shadow-md border border-teal-400 scale-105'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-teal-600 shadow-sm'
+                      }`}
+                    >
+                      {getCategoryIcon(func)}
+                      <span>{func === 'All' ? 'All Functions' : func}</span>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                          isActive
+                            ? 'bg-white/25 text-white font-black'
+                            : 'bg-slate-800 text-teal-300 border border-slate-700'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             )}
 
-            {/* Species Filter Row */}
             {(filterMode === 'species' || filterMode === 'combined') && (
-              <div className="space-y-2">
-                {filterMode === 'combined' && (
-                  <div className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                    <PawPrint className="w-3.5 h-3.5 text-teal-400" />
-                    <span>Target Species:</span>
-                  </div>
-                )}
-                <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter products by species">
-                  {speciesOptions.map(cat => (
-                    <CategoryTab
-                      key={`spec-${cat}`}
-                      label={cat === 'All' ? 'All Species' : cat}
-                      isActive={activeSpecies === cat}
+              <div className="flex flex-wrap gap-2.5 pt-2">
+                {speciesOptions.map(cat => {
+                  const isActive = activeSpecies === cat;
+                  const count = getSpeciesCount(cat);
+                  return (
+                    <button
+                      type="button"
+                      key={`minimal-spec-${cat}`}
                       onClick={() => setActiveSpecies(cat)}
-                      layoutId="activeSpeciesTab"
-                      count={getSpeciesCount(cat)}
-                    />
-                  ))}
-                </div>
+                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
+                        isActive
+                          ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white font-extrabold shadow-md border border-teal-400 scale-105'
+                          : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-teal-600 shadow-sm'
+                      }`}
+                    >
+                      {getCategoryIcon(cat)}
+                      <span>{cat === 'All' ? 'All Species' : cat}</span>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                          isActive
+                            ? 'bg-white/25 text-white font-black'
+                            : 'bg-slate-800 text-teal-300 border border-slate-700'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             )}
 
-          </div>
-
-          {/* Status Bar & Reset Option */}
-          <div className="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div className="text-slate-300">
-              Showing <span className="font-bold text-teal-300">{filtered.length}</span> of <span className="font-bold text-slate-200">{MOCK_PRODUCTS.length}</span> products
-              {isFiltered && (
-                <span className="ml-2 text-amber-300 font-medium">
-                  (Filtered by {activeSpecies !== 'All' ? activeSpecies : ''} {activeSpecies !== 'All' && activeFunction !== 'All' ? '·' : ''} {activeFunction !== 'All' ? activeFunction : ''})
-                </span>
+            {/* Bottom Status Bar */}
+            <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="text-slate-600 font-medium flex items-center gap-2">
+                <span>Showing <strong className="text-teal-900 font-extrabold text-sm">{filtered.length}</strong> of{' '}
+                <strong className="text-slate-900 font-bold">{MOCK_PRODUCTS.length}</strong> formulations</span>
+                {isFiltered && (
+                  <span className="font-extrabold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-200">
+                    Active Filter
+                  </span>
+                )}
+              </div>
+              {inquiryItems.length > 0 && (
+                <button
+                  type="button"
+                  onClick={scrollToContact}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-extrabold transition-all text-xs cursor-pointer shadow-md active:scale-95"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{inquiryItems.length} Products in Inquiry List</span>
+                </button>
               )}
             </div>
 
-            {isFiltered && (
-              <button
-                onClick={resetFilters}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white transition-colors font-medium text-xs"
-              >
-                <RotateCcw className="w-3 h-3 text-amber-400" />
-                <span>Reset Filters</span>
-              </button>
-            )}
           </div>
-
         </div>
 
-        {/* ── Product Grid ────────────────────────────────────────────── */}
+        {/* ── WIDER PRODUCT CARDS GRID ──────────────────────────────── */}
         {filtered.length > 0 ? (
-          <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
             <AnimatePresence mode="popLayout">
-              {filtered.map((product, idx) => {
-                return (
-                  <motion.div
-                    key={product.id}
-                    layout
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.18 } }}
-                    transition={{ duration: 0.48, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                  >
-                    <ProductCard
-                      product={product}
-                      dark
-                      isAddedToInquiry={inquiryItems.some(item => item.id === product.id)}
-                      onToggleInquiry={onToggleInquiry}
-                    />
-                  </motion.div>
-                );
-              })}
+              {filtered.map((product, idx) => (
+                <motion.div
+                  key={product.id}
+                  layout
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.18 } }}
+                  transition={{
+                    duration: 0.4,
+                    delay: idx * 0.04,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  <ProductCard
+                    product={product}
+                    dark={false}
+                    isAddedToInquiry={inquiryItems.some(item => item.id === product.id)}
+                    onToggleInquiry={onToggleInquiry}
+                  />
+                </motion.div>
+              ))}
             </AnimatePresence>
           </motion.div>
         ) : (
-          /* Empty Filter Result State */
+          /* Empty Search / Filter State */
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-16 px-6 bg-slate-900/40 rounded-2xl border border-white/10 max-w-lg mx-auto"
+            className="text-center py-16 px-6 bg-white rounded-2xl border border-slate-200 shadow-sm max-w-md mx-auto my-8"
           >
-            <SearchX className="w-12 h-12 text-teal-400 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">No Matching Products Found</h3>
-            <p className="text-slate-300 text-sm mb-6">
-              No products found matching <span className="text-amber-300 font-semibold">{activeSpecies}</span> in <span className="text-amber-300 font-semibold">{activeFunction}</span>. Try adjusting your filter selection.
+            <SearchX className="w-12 h-12 text-teal-600 mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-slate-900 mb-2">
+              No Formulations Found
+            </h3>
+            <p className="text-slate-600 text-xs leading-relaxed mb-6">
+              No feed additives match your current search criteria. Try clearing your search query or selecting a different category.
             </p>
             <button
               onClick={resetFilters}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm transition-colors shadow-lg shadow-teal-600/30"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs transition-colors shadow-md"
             >
-              <RotateCcw className="w-4 h-4" />
-              <span>Show All Products</span>
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Show All Formulations</span>
             </button>
           </motion.div>
         )}
 
-        {/* ── Scannable Science: Performance Benchmarks ────────────────── */}
-        <div className="mt-24 pt-12 border-t border-white/10">
-          <h2 className="sr-only">Performance Benchmarks</h2>
+        {/* ── Performance Benchmarks Table ────────────────────────── */}
+        <div className="pt-16 mt-16 border-t border-slate-200">
           <ScannableMetricsTable />
         </div>
 

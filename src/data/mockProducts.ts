@@ -57,7 +57,7 @@ export const MOCK_PRODUCTS: Product[] = [
     functionCategory: "Functional Feed Additives",
     speciesTags: [],
     description: "Advanced feed antioxidant formulation designed to prevent lipid autoxidation, preserve fat-soluble vitamins, and extend feed shelf life.",
-    imageUrl: "https://images.unsplash.com/photo-1607619275068-24722480f87b?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80",
     metrics: { fcr: "−5%", dailyGain: "+4%", doseRate: "125–250 g/t" }
   },
   {

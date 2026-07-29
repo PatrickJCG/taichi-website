@@ -26,7 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         dark
           // Glassmorphism dark card — higher contrast on deep teal-forest bg
           ? 'bg-white/10 backdrop-blur-xl border border-white/18 hover:border-teal-300/60 shadow-xl shadow-black/30 hover:shadow-teal-500/20'
-          : 'bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-brand-teal-200/80',
+          : 'bg-white border-2 border-emerald-600 shadow-md hover:shadow-2xl hover:border-emerald-500 hover:ring-4 hover:ring-emerald-500/20',
         'transition-all duration-300',
       ].join(' ')}
     >
@@ -36,14 +36,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       )}
 
       {/* Image & Badge */}
-      <div className={`relative h-48 overflow-hidden ${dark ? 'bg-slate-800/60' : 'bg-slate-100'}`}>
+      <div className={`relative h-56 overflow-hidden ${dark ? 'bg-slate-800/60' : 'bg-slate-100'}`}>
         <img
           src={product.imageUrl}
           alt={product.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
-        {/* Gradient overlay for dark mode */}
-        {dark && <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />}
+        {/* Dark teal gradient overlay fading up from bottom with low opacity */}
+        <div className="absolute inset-0 bg-gradient-to-t from-teal-950/45 via-teal-900/15 to-transparent pointer-events-none" />
         
         {/* Top-left: Product Badge */}
         <div className="absolute top-3 left-3">
@@ -70,8 +70,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Function Category Tag (Product Type) */}
         <div className="mb-2">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-brand-amber-500/15 border border-brand-amber-400/30 text-amber-300">
-            <Sparkles className="w-3 h-3 text-amber-400" />
+          <span className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md border ${
+            dark
+              ? 'bg-amber-500/20 border-amber-400/40 text-amber-200'
+              : 'bg-amber-100 border-amber-300 text-amber-950 shadow-sm'
+          }`}>
+            <Sparkles className={`w-3 h-3 ${dark ? 'text-amber-300' : 'text-amber-700'}`} />
             {product.functionCategory}
           </span>
         </div>
@@ -125,10 +129,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           }
           className={
             isAddedToInquiry
-              ? '!bg-amber-600 !border-amber-500 !text-white hover:!bg-amber-700 hover:!border-amber-600 hover:!text-white shadow-md'
-              : dark
-                ? '!bg-teal-500/20 !border-teal-400/40 !text-teal-200 hover:!bg-teal-600 hover:!text-white hover:!border-teal-500 hover:shadow-lg hover:shadow-teal-500/40 transition-all duration-200'
-                : '!bg-teal-50 !text-teal-800 !border-teal-200 hover:!bg-teal-700 hover:!text-white hover:!border-teal-700 shadow-md transition-all duration-200'
+              ? '!bg-emerald-700 !border-emerald-600 !text-white hover:!bg-emerald-800 shadow-md font-bold'
+              : '!bg-teal-700 !text-white !border-teal-700 hover:!bg-teal-800 hover:!border-teal-800 shadow-md shadow-teal-700/20 font-bold transition-all duration-200'
           }
         >
           {isAddedToInquiry ? "Added to Inquiry" : "Add to Inquiry"}
