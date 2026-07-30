@@ -26,7 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         dark
           // Glassmorphism dark card — higher contrast on deep teal-forest bg
           ? 'bg-white/10 backdrop-blur-xl border border-white/18 hover:border-teal-300/60 shadow-xl shadow-black/30 hover:shadow-teal-500/20'
-          : 'bg-white border-2 border-emerald-600 shadow-md hover:shadow-2xl hover:border-emerald-500 hover:ring-4 hover:ring-emerald-500/20',
+          : 'bg-white border border-slate-200 shadow-md hover:shadow-xl hover:border-teal-500/50 hover:ring-2 hover:ring-teal-500/10',
         'transition-all duration-300',
       ].join(' ')}
     >

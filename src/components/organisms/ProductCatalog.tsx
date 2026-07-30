@@ -201,7 +201,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         </div>
 
         {/* ── BALANCED MINIMALISTIC CATALOG FILTER PANEL ── */}
-        <div className="relative rounded-2xl p-6 sm:p-7 shadow-xl border-[3px] border-teal-900 bg-white mb-14 space-y-5 overflow-hidden">
+        <div className="relative rounded-2xl p-6 sm:p-7 shadow-lg border border-slate-200/90 bg-white mb-14 space-y-5 overflow-hidden">
           
           <div className="relative z-10 space-y-4">
             
@@ -211,19 +211,19 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               {/* Minimalist Search Bar */}
               <div className="flex-1 max-w-xl relative">
                 <div className="relative">
-                  <Search className="w-4 h-4 text-teal-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-teal-600 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     placeholder="Search formulations by name, ingredient, or species..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 transition-all shadow-inner"
+                    className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 text-slate-800 text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 transition-all shadow-sm"
                   />
                   {searchQuery && (
                     <button
                       type="button"
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                       title="Clear search"
                     >
                       <X className="w-4 h-4" />
@@ -234,14 +234,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
               {/* Minimalist Mode Selector Tabs & Reset */}
               <div className="flex flex-wrap items-center gap-3">
-                <div className="p-1 bg-slate-900 rounded-xl flex items-center gap-1 border border-slate-800 shadow-inner">
+                <div className="p-1 bg-slate-100 rounded-xl flex items-center gap-1 border border-slate-200/90 shadow-inner">
                   <button
                     type="button"
                     onClick={() => setFilterMode('function')}
                     className={`py-2 px-3.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none active:scale-95 ${
                       filterMode === 'function'
-                        ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold shadow-md'
-                        : 'text-slate-300 hover:text-white'
+                        ? 'bg-teal-700 text-white font-bold shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                     }`}
                   >
                     By Function
@@ -251,8 +251,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     onClick={() => setFilterMode('species')}
                     className={`py-2 px-3.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none active:scale-95 ${
                       filterMode === 'species'
-                        ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold shadow-md'
-                        : 'text-slate-300 hover:text-white'
+                        ? 'bg-teal-700 text-white font-bold shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                     }`}
                   >
                     By Species
@@ -262,8 +262,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     onClick={() => setFilterMode('combined')}
                     className={`py-2 px-3.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none active:scale-95 ${
                       filterMode === 'combined'
-                        ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-extrabold shadow-md'
-                        : 'text-slate-300 hover:text-white'
+                        ? 'bg-teal-700 text-white font-bold shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                     }`}
                   >
                     All
@@ -274,9 +274,9 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   <button
                     type="button"
                     onClick={resetFilters}
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-extrabold transition-all border border-slate-800 cursor-pointer active:scale-95 shadow-sm"
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 text-xs font-bold transition-all border border-slate-200 cursor-pointer active:scale-95 shadow-sm"
                   >
-                    <RotateCcw className="w-3.5 h-3.5 text-teal-400" />
+                    <RotateCcw className="w-3.5 h-3.5 text-teal-700" />
                     <span>Reset</span>
                   </button>
                 )}
@@ -294,10 +294,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       type="button"
                       key={`minimal-func-${func}`}
                       onClick={() => setActiveFunction(func)}
-                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
+                      className={`flex items-center gap-2.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
                         isActive
-                          ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white font-extrabold shadow-md border border-teal-400 scale-105'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-teal-600 shadow-sm'
+                          ? 'bg-teal-700 hover:bg-teal-800 text-white font-bold shadow-sm border border-teal-700'
+                          : 'bg-slate-50 hover:bg-teal-50/70 text-slate-700 border border-slate-200/90 hover:border-teal-300 shadow-sm hover:text-teal-900'
                       }`}
                     >
                       {getCategoryIcon(func)}
@@ -305,8 +305,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
                           isActive
-                            ? 'bg-white/25 text-white font-black'
-                            : 'bg-slate-800 text-teal-300 border border-slate-700'
+                            ? 'bg-white/20 text-white font-bold'
+                            : 'bg-slate-200/80 text-slate-600 border border-slate-300/50'
                         }`}
                       >
                         {count}
@@ -327,10 +327,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       type="button"
                       key={`minimal-spec-${cat}`}
                       onClick={() => setActiveSpecies(cat)}
-                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
+                      className={`flex items-center gap-2.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
                         isActive
-                          ? 'bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white font-extrabold shadow-md border border-teal-400 scale-105'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-teal-600 shadow-sm'
+                          ? 'bg-teal-700 hover:bg-teal-800 text-white font-bold shadow-sm border border-teal-700'
+                          : 'bg-slate-50 hover:bg-teal-50/70 text-slate-700 border border-slate-200/90 hover:border-teal-300 shadow-sm hover:text-teal-900'
                       }`}
                     >
                       {getCategoryIcon(cat)}
@@ -338,8 +338,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
                           isActive
-                            ? 'bg-white/25 text-white font-black'
-                            : 'bg-slate-800 text-teal-300 border border-slate-700'
+                            ? 'bg-white/20 text-white font-bold'
+                            : 'bg-slate-200/80 text-slate-600 border border-slate-300/50'
                         }`}
                       >
                         {count}

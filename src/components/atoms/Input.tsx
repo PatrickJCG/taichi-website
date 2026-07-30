@@ -37,7 +37,7 @@ export const Select: React.FC<SelectProps> = ({ label, options, required, labelC
       <select
         {...props}
         required={required}
-        className={`w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-teal-600 focus:ring-2 focus:ring-brand-teal-500/20 outline-none transition-all text-slate-800 bg-white ${className}`}
+        className={`w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-teal-600 focus:ring-2 focus:ring-brand-teal-500/20 outline-none transition-all text-slate-800 ${className}`}
       >
         {options.map((opt, idx) => (
           <option key={idx} value={opt.value}>
