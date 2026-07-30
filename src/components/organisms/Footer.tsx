@@ -58,10 +58,14 @@ export const Footer: React.FC = () => {
           </div>
           <div className="shrink-0 flex flex-wrap gap-3">
             <a
-              href="/#contact"
+              href="/products"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/products');
+              }}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white text-sm font-bold shadow-lg shadow-teal-500/20 hover:shadow-teal-400/30 transition-all duration-200"
             >
-              <span>Contact Technical Team</span>
+              <span>Explore Products</span>
               <ChevronRight className="w-4 h-4" />
             </a>
           </div>
@@ -70,8 +74,8 @@ export const Footer: React.FC = () => {
         {/* ── Main Footer Columns ────────────────────────────────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-teal-500/20">
 
-          {/* Column 1: Brand & Overview (LG: 4 cols) */}
-          <div className="lg:col-span-4 space-y-5">
+          {/* Column 1: Brand & Overview (LG: 3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
             <Link
               to="/"
               className="inline-block group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 rounded-lg"
@@ -86,28 +90,10 @@ export const Footer: React.FC = () => {
             <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
               Dedicated to research-backed, pro-environmental feed additive innovations. Headquartered in the Philippines and empowering global animal production efficiency.
             </p>
-
-            {/* Quality & Certification Standards */}
-            <div className="pt-2 space-y-2.5">
-              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-400">
-                <Award className="w-4 h-4 text-teal-400" />
-                <span>Certified Quality Standards</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {['ISO 22000', 'FAMI-QS', 'GMP+', 'ISO 9001', 'FDA', 'Halal'].map(cert => (
-                  <span
-                    key={cert}
-                    className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-teal-950/80 border border-teal-500/30 text-teal-300 shadow-sm"
-                  >
-                    {cert}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
 
-          {/* Column 2: Products & Categories (LG: 3 cols) */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* Column 2: Products & Solutions + Certifications (LG: 4 cols) */}
+          <div className="lg:col-span-4 space-y-4">
             <h3 className="text-xs font-bold text-white uppercase tracking-widest font-heading flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
               Products & Solutions
@@ -150,6 +136,24 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
             </ul>
+
+            {/* Quality & Certification Standards */}
+            <div className="pt-3 space-y-2.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-400">
+                <Award className="w-4 h-4 text-teal-400" />
+                <span>Certified Quality Standards</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['ISO 22000', 'FAMI-QS', 'GMP+', 'ISO 9001', 'FDA', 'Halal'].map(cert => (
+                  <span
+                    key={cert}
+                    className="text-[10px] font-bold px-2.5 py-1 rounded-md bg-teal-950/80 border border-teal-500/30 text-teal-300 shadow-sm"
+                  >
+                    {cert}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Column 3: Corporate Links (LG: 2 cols) */}

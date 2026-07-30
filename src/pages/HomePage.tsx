@@ -12,12 +12,14 @@ export interface HomePageProps {
   inquiryItems: Product[];
   onToggleInquiry: (product: Product) => void;
   onRemoveInquiryItem: (productId: string) => void;
+  onClearInquiry?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
   inquiryItems,
   onToggleInquiry,
   onRemoveInquiryItem,
+  onClearInquiry,
 }) => {
   const location = useLocation();
 
@@ -55,7 +57,11 @@ export const HomePage: React.FC<HomePageProps> = ({
       <NewsSection />
 
       {/* 6. Contact */}
-      <ContactSection inquiryItems={inquiryItems} onRemoveInquiryItem={onRemoveInquiryItem} />
+      <ContactSection
+        inquiryItems={inquiryItems}
+        onRemoveInquiryItem={onRemoveInquiryItem}
+        onClearInquiry={onClearInquiry}
+      />
     </>
   );
 };

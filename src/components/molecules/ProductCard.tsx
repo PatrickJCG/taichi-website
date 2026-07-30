@@ -124,13 +124,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           onClick={() => onToggleInquiry(product)}
           icon={
             isAddedToInquiry 
-              ? <Check className="w-4 h-4" /> 
-              : <Plus className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+              ? <Check className="w-4 h-4 stroke-[3] text-white" /> 
+              : <Plus className="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" />
           }
           className={
             isAddedToInquiry
-              ? '!bg-emerald-700 !border-emerald-600 !text-white hover:!bg-emerald-800 shadow-md font-bold'
-              : '!bg-teal-700 !text-white !border-teal-700 hover:!bg-teal-800 hover:!border-teal-800 shadow-md shadow-teal-700/20 font-bold transition-all duration-200'
+              ? '!bg-emerald-500 hover:!bg-emerald-600 !text-white !border-emerald-400 shadow-lg shadow-emerald-500/30 ring-2 ring-emerald-400/50 font-black scale-[1.02] transition-all duration-200 cursor-pointer'
+              : '!bg-teal-700 hover:!bg-teal-800 !text-white !border-teal-700 hover:!border-teal-800 shadow-md shadow-teal-700/20 hover:shadow-lg hover:-translate-y-0.5 font-bold transition-all duration-200 cursor-pointer'
           }
         >
           {isAddedToInquiry ? "Added to Inquiry" : "Add to Inquiry"}

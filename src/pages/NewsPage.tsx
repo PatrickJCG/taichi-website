@@ -26,6 +26,7 @@ export interface NewsPageProps {
   inquiryItems?: Product[];
   onToggleInquiry?: (product: Product) => void;
   onRemoveInquiryItem?: (productId: string) => void;
+  onClearInquiry?: () => void;
 }
 
 export const NewsPage: React.FC<NewsPageProps> = () => {

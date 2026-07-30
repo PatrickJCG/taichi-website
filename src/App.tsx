@@ -23,6 +23,10 @@ export function App() {
     setInquiryItems(prev => prev.filter(item => item.id !== productId));
   };
 
+  const handleClearInquiry = () => {
+    setInquiryItems([]);
+  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -35,6 +39,7 @@ export function App() {
                 inquiryItems={inquiryItems}
                 onToggleInquiry={handleToggleInquiry}
                 onRemoveInquiryItem={handleRemoveInquiryItem}
+                onClearInquiry={handleClearInquiry}
               />
             </PageLayout>
           }
@@ -49,6 +54,7 @@ export function App() {
                 inquiryItems={inquiryItems}
                 onToggleInquiry={handleToggleInquiry}
                 onRemoveInquiryItem={handleRemoveInquiryItem}
+                onClearInquiry={handleClearInquiry}
               />
             </PageLayout>
           }
@@ -61,8 +67,8 @@ export function App() {
             <PageLayout inquiryCount={inquiryItems.length}>
               <NewsPage
                 inquiryItems={inquiryItems}
-                onToggleInquiry={handleToggleInquiry}
                 onRemoveInquiryItem={handleRemoveInquiryItem}
+                onClearInquiry={handleClearInquiry}
               />
             </PageLayout>
           }
@@ -73,8 +79,8 @@ export function App() {
             <PageLayout inquiryCount={inquiryItems.length}>
               <NewsPage
                 inquiryItems={inquiryItems}
-                onToggleInquiry={handleToggleInquiry}
                 onRemoveInquiryItem={handleRemoveInquiryItem}
+                onClearInquiry={handleClearInquiry}
               />
             </PageLayout>
           }

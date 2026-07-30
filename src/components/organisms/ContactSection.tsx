@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Mail, MapPin, Phone, Lock, Clock, Shield, X, Building2, ChevronRight } from 'lucide-react';
+import { Send, Mail, MapPin, Phone, Lock, Clock, Shield, X, Building2, ChevronRight, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { Product } from '../../data/mockProducts';
 import { Badge, Button, Input, Select, Textarea } from '../atoms';
@@ -7,6 +7,7 @@ import { Badge, Button, Input, Select, Textarea } from '../atoms';
 export interface ContactSectionProps {
   inquiryItems: Product[];
   onRemoveInquiryItem: (productId: string) => void;
+  onClearInquiry?: () => void;
 }
 
 // ─── Static Data ──────────────────────────────────────────────────────────────
@@ -53,6 +54,7 @@ const TRUST_ITEMS = [
 export const ContactSection: React.FC<ContactSectionProps> = ({
   inquiryItems,
   onRemoveInquiryItem,
+  onClearInquiry,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -248,12 +250,29 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 {/* ── Inquiry Items Summary ─────────────────────────── */}
                 {inquiryItems.length > 0 && (
                   <div className="p-4 bg-teal-50/70 rounded-xl border border-teal-200 shadow-inner">
-                    <label className="block text-xs font-bold text-teal-900 uppercase tracking-wider mb-3">
-                      <span className="inline-flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-teal-600 animate-pulse" />
-                        Products in Inquiry ({inquiryItems.length})
-                      </span>
-                    </label>
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <label className="block text-xs font-bold text-teal-900 uppercase tracking-wider">
+                        <span className="inline-flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-teal-600 animate-pulse" />
+                          Products in Inquiry ({inquiryItems.length})
+                        </span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onClearInquiry) {
+                            onClearInquiry();
+                          } else {
+                            inquiryItems.forEach(item => onRemoveInquiryItem(item.id));
+                          }
+                        }}
+                        className="flex items-center gap-1.5 text-[11px] font-bold text-red-700 hover:text-red-800 hover:bg-red-100/80 bg-red-50/90 border border-red-200/90 px-2.5 py-1 rounded-lg transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
+                        title="Clear all products from inquiry list"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                        <span>Clear All</span>
+                      </button>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {inquiryItems.map(item => (
                         <span

@@ -8,6 +8,7 @@ export interface ProductsPageProps {
   inquiryItems: Product[];
   onToggleInquiry: (product: Product) => void;
   onRemoveInquiryItem: (productId: string) => void;
+  onClearInquiry?: () => void;
 }
 
 /**
@@ -20,6 +21,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
   inquiryItems,
   onToggleInquiry,
   onRemoveInquiryItem,
+  onClearInquiry,
 }) => {
   const [searchParams] = useSearchParams();
 
@@ -58,6 +60,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
       <ContactSection
         inquiryItems={inquiryItems}
         onRemoveInquiryItem={onRemoveInquiryItem}
+        onClearInquiry={onClearInquiry}
       />
     </>
   );
